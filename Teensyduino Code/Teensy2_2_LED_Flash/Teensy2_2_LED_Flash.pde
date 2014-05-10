@@ -3,9 +3,7 @@
 // by David Sampson 
 // 20/7/2011
 
-
 const int ledPin = 11;   // Teensy has LED on 11, Teensy++ on 6
-
 
 const int led_1_pos = 21;
 const int led_1_gnd = 20;
