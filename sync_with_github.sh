@@ -17,18 +17,11 @@ git commit -a -m 'Auto update from Six'
 # push the local repository out to Git-Hub
 # need to pass the user ID and password 
 echo 'Push out the local repository'
-git push 'https://github.com/sampsontech/Teensyduino-Code.git' << XXX
-sampsontech
-lantra01
-XXX
-
+git push 'https://sampsontech:lantra01@github.com/sampsontech/Teensyduino-Code.git' 
 # Pull all updates from Git-Hub 
 # need to pass the user ID and password 
 echo 'pull in and merge the remote repository'
-git pull 'https://github.com/sampsontech/Teensyduino-Code.git' << XXX
-sampsontech
-lantra01
-XXX
+git pull 'https://sampsontech:lantra01@github.com/sampsontech/Teensyduino-Code.git'
 
 #done
 echo 'Done...'
