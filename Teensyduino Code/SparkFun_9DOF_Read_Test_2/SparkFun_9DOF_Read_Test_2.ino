@@ -205,9 +205,13 @@ void loop()
   Serial.println(Gyro_T, DEC);
   
   Serial.print("Gyro Adjusted Temp=");
-  Serial.println( (((float)Gyro_T+13200)/280)+35 );  //35degrees offset = -13200
-  
-  
+  // Negative reading offset at +35C degrees = -13200
+  // Sensitivity = 280 LSB per degree
+  // Range = -30C to +85C degrees
+  // Therefore TempC = (reading + offset) / sensitivity + range lower limit
+  // Therefore TempC = (Gyro_T + 13200) / 280 + 30
+  Serial.println( (((float)Gyro_T+13200)/280)+30 );  
+
   Serial.println();
   // Introduce a delay into the loop
   delay(70);
