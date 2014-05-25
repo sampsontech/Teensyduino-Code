@@ -210,7 +210,9 @@ void loop()
   // Range = -30C to +85C degrees
   // Therefore TempC = (reading + offset) / sensitivity + range lower limit
   // Therefore TempC = (Gyro_T + 13200) / 280 + 30
-  Serial.println( (((float)Gyro_T+13200)/280)+30 );  
+  // But the test unit seems to be a little under (per unit variance?).
+  // Therefore I'm adding 1 additional degree which seems to be within spec limits
+  Serial.println( (((float)Gyro_T+13200)/280)+31 );  
 
   Serial.println();
   // Introduce a delay into the loop
