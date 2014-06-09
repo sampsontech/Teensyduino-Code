@@ -1,5 +1,43 @@
 #include <Wire.h>
 
+
+class ADXL345_HAL {
+
+private:
+
+protected:
+
+public:
+        
+    // Class Constructor
+    ADXL345_HAL() {
+        
+    };			
+ 
+    //Class Destructor
+    ~ADXL345_HAL() {
+        
+    };
+
+    // Initialise the device
+    void init_dev() {
+                
+    };				
+
+    // Read all the sensors
+    void read_dev() {
+                
+    };
+        
+        
+        
+};
+
+
+
+
+
+
 // set the variables for the HMC5883L Compass
   #define CompassAddress (0x1E)  // Device 7 bit base address (Drop the LSB which holds the R/W bit)
   // Hold the Compass readings and values
