@@ -28,6 +28,14 @@ class ADXL345_HAL {
 
   
 //---------------------------------------------------------------------------
+// Constructor
+ADXL345_HAL::ADXL345_HAL() { }
+
+//---------------------------------------------------------------------------
+// Destructor
+ADXL345_HAL::~ADXL345_HAL() { }
+ 
+//---------------------------------------------------------------------------
 // Initialise the device
 void ADXL345_HAL::Init_Dev() {
   // Setup the ADXL345 Accelerometer
@@ -218,8 +226,8 @@ void ADXL345_HAL::Print_Accel_Data(int detail_level) {
 
 
 
-
-
+// Define accelerometer object 
+  ADXL345_HAL Accel;
 
 // set the variables for the HMC5883L Compass
   #define CompassAddress (0x1E)  // Device 7 bit base address (Drop the LSB which holds the R/W bit)
@@ -247,6 +255,7 @@ void ADXL345_HAL::Print_Accel_Data(int detail_level) {
   int Gyro_Y;           // Hold the last gyro Y Axis  reading
   int Gyro_Z;           // Hold the last gyro Z Axis  reading
 
+
 //---------------------------------------------------------------------------
 void setup() 
 {
@@ -257,10 +266,7 @@ void setup()
 // Setup I2C interface
   Wire.begin();
 
-
-// Define and initialize accelerometer object 
-ADXL345_HAL Accel;
-
+// Initialize accelerometer object 
 Accel.Init_Dev();
 
 
