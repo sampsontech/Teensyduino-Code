@@ -9,7 +9,7 @@ protected:
 
 public:
 
-		// set the variables for the ADXL345 Accelerometer
+	// set the variables for the ADXL345 Accelerometer
   	#define AccelAddress (0x53) // Device ALT 7 bit base address (Drop the LSB which holds the R/W bit)
   	// (ALT base address is used when pin 12 is GNDed (as in the SparkFun 9DOF board) 
   	int Accel_X;          // Hold the last accelerometer X axis reading
@@ -33,47 +33,186 @@ public:
 
     // Initialise the device
     void init_dev() {
-    // Setup the ADXL345 Accelerometer
-    Serial.print("Setting up ADXL345 Accelerometer...");
+	    // Setup the ADXL345 Accelerometer
+ 	    Serial.print("Setting up ADXL345 Accelerometer...");
 
-    //Put the sensor into measurement mode. The data sheet recommends that you first Reset, then Sleep mode then Measurement mode.
-    Wire.beginTransmission(AccelAddress); 
-    Wire.write(0x2D);  //Reset the POWER_CTL (0x2D) register.
-    Wire.write(0b00000000);
-    Wire.endTransmission();
+	    //Put the sensor into measurement mode. The data sheet recommends that you first Reset, then Sleep mode then Measurement mode.
+	    Wire.beginTransmission(AccelAddress); 
+	    Wire.write(0x2D);  //Reset the POWER_CTL (0x2D) register.
+	    Wire.write(0b00000000);
+	    Wire.endTransmission();
 
-    Wire.beginTransmission(AccelAddress); 
-    Wire.write(0x2D);  //Put the ADXL345 into StandBy mode by writing 0x10 to the POWER_CTL (0x2D) register.
-    Wire.write(0b00010000);
-    Wire.endTransmission();
+	    Wire.beginTransmission(AccelAddress); 
+	    Wire.write(0x2D);  //Put the ADXL345 into StandBy mode by writing 0x10 to the POWER_CTL (0x2D) register.
+	    Wire.write(0b00010000);
+	    Wire.endTransmission();
 
-    Wire.beginTransmission(AccelAddress); 
-    Wire.write(0x2D);  //Put the ADXL345 into Measurement Mode by writing 0x08 to the POWER_CTL (0x2D) register.
-    Wire.write(0b00001000);
-    Wire.endTransmission();
+	    Wire.beginTransmission(AccelAddress); 
+	    Wire.write(0x2D);  //Put the ADXL345 into Measurement Mode by writing 0x08 to the POWER_CTL (0x2D) register.
+	    Wire.write(0b00001000);
+	    Wire.endTransmission();
 
-    // force a calibration event
-    Accel_X_Center_Ave = 99;
+	    // force a calibration event
+	    Accel_X_Center_Ave = 99;
 
 
-    //Set the G force range the sensor will work in 
-    Wire.beginTransmission(AccelAddress); 
-    Wire.write(0x31);  //Put the ADXL345 into +/- 4G range by writing the value 0x01 to the DATA_FORMAT (0x31) register.
-    Wire.write(0b00000001);  //(Default is +/-2G range
-    Wire.endTransmission();
+	    //Set the G force range the sensor will work in 
+	    Wire.beginTransmission(AccelAddress); 
+	    Wire.write(0x31);  //Put the ADXL345 into +/- 4G range by writing the value 0x01 to the DATA_FORMAT (0x31) register.
+	    Wire.write(0b00000001);  //(Default is +/-2G range
+	    Wire.endTransmission();
 
-    Serial.println("Done");
-    delay(100);
-
+	    Serial.println("Done");
+	    delay(100);
     };
 
     // Read all the sensors
-    void read_dev() {
-                
-    };
-        
-        
-        
+    void Read_Accel() {
+      //---------------------------------------------------------------------------
+      // Read the ADXL345 Accelerometer
+      // Point to the first data register  
+      Wire.beginTransmission(AccelAddress);  // start transmission to device 
+      Wire.write(0x32);                       // point to the first data register DATAX0
+      Wire.endTransmission();                // end transmission
+
+      // read 6 byte, from address 32 (Data Registers)
+      Wire.beginTransmission(AccelAddress);  // start transmission to device 
+      Wire.requestFrom(AccelAddress, 6);
+      if (Wire.available() >= 6) {
+        Accel_X = Wire.read() + (Wire.read() * 256);  // X axis LSB + X axis MSB * 256
+        Accel_Y = Wire.read() + (Wire.read() * 256);  // Y axis LSB + Y axis MSB * 256
+        Accel_Z = Wire.read() + (Wire.read() * 256);  // Z axis LSB + Z axis MSB * 256
+      }
+
+      // Incorrent number of returned bytes
+      else {
+        Serial.println("Recieving incorrect amount of bytes from Accelerometer");
+        while(Wire.available()) {
+          Serial.print("data byte = ");
+          Serial.println(Wire.read(), DEC);    //print the returned number as a decimal
+        }
+      }
+      Wire.endTransmission();
+    }
+
+
+//---------------------------------------------------------------------------
+// Calibrate the Accelerometer - "Average" method
+void Accel_Calib_Ave()
+{
+  Serial.println("Performing a Accelometer calibration using the Averaging method");
+  
+  Accel_X_Center_Ave = 0;
+  Accel_X_Center_Ave_Total =0;
+  Accel_Y_Center_Ave = 0;
+  Accel_Y_Center_Ave_Total =0;
+  Accel_Z_Center_Ave = 0;
+  Accel_Z_Center_Ave_Total =0;
+    
+  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+    Serial.print(".");
+    
+    Read_Accel();
+      
+    // Summ up the reads for the average
+    Accel_X_Center_Ave_Total += Accel_X;
+    Accel_Y_Center_Ave_Total += Accel_Y;
+    Accel_Z_Center_Ave_Total += Accel_Z;
+  }
+
+  // Calc the average over the sample
+  Accel_X_Center_Ave = (float)Accel_X_Center_Ave_Total / Accel_Reading_Count;
+  Accel_Y_Center_Ave = (float)Accel_Y_Center_Ave_Total / Accel_Reading_Count;
+  Accel_Z_Center_Ave = (float)Accel_Z_Center_Ave_Total / Accel_Reading_Count;
+
+  Serial.println("Done");
+};  
+
+//---------------------------------------------------------------------------
+// Calibrate the Accelerometer - "Low Pass Filter" method
+void Accel_Calib_LPF()
+{
+  Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
+  
+  Accel_X_Center_LPF = 0;
+  Accel_Y_Center_LPF = 0;
+  Accel_Z_Center_LPF = 0;
+    
+  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+    Serial.print(".");
+    
+    Read_Accel();
+    
+    // Take 90% of the previous cumulative value and 10% on the current reading 
+    // (Bit like averaging
+    Accel_X_Center_LPF = Accel_X_Center_LPF * 0.9f + Accel_X * 0.1f;
+    Accel_Y_Center_LPF = Accel_Y_Center_LPF * 0.9f + Accel_Y * 0.1f;
+    Accel_Z_Center_LPF = Accel_Z_Center_LPF * 0.9f + Accel_Z * 0.1f;
+  };
+
+  Serial.println("Done");
+};  
+
+
+
+//---------------------------------------------------------------------------
+// Print Accelerometer details to serial
+void Print_Accel_Data(int detail_level)
+{
+  // Detail_Level of 1 = Print basic information 
+  // Detail_Level of 9 = Print all available information 
+  
+  if (detail_level==1 || detail_level==9){
+    Serial.print("Accel Center Ave");
+    Serial.print("\t X=");
+    Serial.print(Accel_X_Center_Ave, 6);
+    Serial.print("\t Y=");
+    Serial.print(Accel_Y_Center_Ave, 6);
+    Serial.print("\t Z=");
+    Serial.println(Accel_Z_Center_Ave, 6);
+
+    Serial.print("Accel Center Ave Total");
+    Serial.print("\t X=");
+    Serial.print(Accel_X_Center_Ave_Total);
+    Serial.print("\t Y=");
+    Serial.print(Accel_Y_Center_Ave_Total);
+    Serial.print("\t Z=");
+    Serial.println(Accel_Z_Center_Ave_Total);
+
+    Serial.print("Accel Center LPF");
+    Serial.print("\t X=");
+    Serial.print(Accel_X_Center_LPF, 6);
+    Serial.print("\t Y=");
+    Serial.print(Accel_Y_Center_LPF, 6);
+    Serial.print("\t Z=");
+    Serial.println(Accel_Z_Center_LPF, 6);
+    
+    float a_XZ, a_YZ;
+    a_XZ = atan2(Accel_X_Center_LPF, Accel_Z_Center_LPF);
+    a_YZ = atan2(Accel_Y_Center_LPF, Accel_Z_Center_LPF);
+    
+    Serial.print("Accel Center LPF - ATAN2 XZ = ");
+    Serial.print(a_XZ, 6);
+    Serial.print("\t ATAN2 YZ = ");
+    Serial.println(a_YZ, 6);
+    Serial.print("XZ + YZ = ");
+    Serial.println((a_XZ+a_YZ), 6);
+    
+    
+  };
+  
+  if (detail_level==9){
+    Serial.print("Accel X=");
+    Serial.print(Accel_X, DEC);
+    Serial.print("\t : Y=");
+    Serial.print(Accel_Y, DEC);
+    Serial.print("\t : Z=");
+    Serial.println(Accel_Z, DEC);
+  };
+};
+
+
+
 };
 
 
@@ -289,34 +428,6 @@ void Read_Compass()
   
 }
 
-//---------------------------------------------------------------------------
-// Read the ADXL345 Accelerometer
-void Read_Accel()
-{
-  // Point to the first data register  
-  Wire.beginTransmission(AccelAddress);  // start transmission to device 
-  Wire.write(0x32);                       // point to the first data register DATAX0
-  Wire.endTransmission();                // end transmission
-
-  // read 6 byte, from address 32 (Data Registers)
-  Wire.beginTransmission(AccelAddress);  // start transmission to device 
-  Wire.requestFrom(AccelAddress, 6);
-  if (Wire.available() >= 6) {
-    Accel_X = Wire.read() + (Wire.read() * 256);  // X axis LSB + X axis MSB * 256
-    Accel_Y = Wire.read() + (Wire.read() * 256);  // Y axis LSB + Y axis MSB * 256
-    Accel_Z = Wire.read() + (Wire.read() * 256);  // Z axis LSB + Z axis MSB * 256
-  }
-
-  // Incorrent number of returned bytes
-  else {
-    Serial.println("Recieving incorrect amount of bytes from Accelerometer");
-    while(Wire.available()) {
-      Serial.print("data byte = ");
-      Serial.println(Wire.read(), DEC);    //print the returned number as a decimal
-    }
-  }
-  Wire.endTransmission();
-}
 
 //---------------------------------------------------------------------------
 // Read the ITG3200 Gyroscope
@@ -348,63 +459,6 @@ void Read_Gyro()
   }
   Wire.endTransmission();
 }
-
-//---------------------------------------------------------------------------
-// Calibrate the Accelerometer - "Average" method
-void Accel_Calib_Ave()
-{
-  Serial.println("Performing a Accelometer calibration using the Averaging method");
-  
-  Accel_X_Center_Ave = 0;
-  Accel_X_Center_Ave_Total =0;
-  Accel_Y_Center_Ave = 0;
-  Accel_Y_Center_Ave_Total =0;
-  Accel_Z_Center_Ave = 0;
-  Accel_Z_Center_Ave_Total =0;
-    
-  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
-    Serial.print(".");
-    
-    Read_Accel();
-      
-    // Summ up the reads for the average
-    Accel_X_Center_Ave_Total += Accel_X;
-    Accel_Y_Center_Ave_Total += Accel_Y;
-    Accel_Z_Center_Ave_Total += Accel_Z;
-  }
-
-  // Calc the average over the sample
-  Accel_X_Center_Ave = (float)Accel_X_Center_Ave_Total / Accel_Reading_Count;
-  Accel_Y_Center_Ave = (float)Accel_Y_Center_Ave_Total / Accel_Reading_Count;
-  Accel_Z_Center_Ave = (float)Accel_Z_Center_Ave_Total / Accel_Reading_Count;
-
-  Serial.println("Done");
-}  
-
-//---------------------------------------------------------------------------
-// Calibrate the Accelerometer - "Low Pass Filter" method
-void Accel_Calib_LPF()
-{
-  Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
-  
-  Accel_X_Center_LPF = 0;
-  Accel_Y_Center_LPF = 0;
-  Accel_Z_Center_LPF = 0;
-    
-  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
-    Serial.print(".");
-    
-    Read_Accel();
-    
-    // Take 90% of the previous cumulative value and 10% on the current reading 
-    // (Bit like averaging
-    Accel_X_Center_LPF = Accel_X_Center_LPF * 0.9f + Accel_X * 0.1f;
-    Accel_Y_Center_LPF = Accel_Y_Center_LPF * 0.9f + Accel_Y * 0.1f;
-    Accel_Z_Center_LPF = Accel_Z_Center_LPF * 0.9f + Accel_Z * 0.1f;
-  }
-
-  Serial.println("Done");
-}  
 
 //---------------------------------------------------------------------------
 // Print Compass details to serial
@@ -463,62 +517,6 @@ void Print_Compass_Data(int detail_level)
     Serial.print(Compass_Offset_Y, DEC);
     Serial.print("\t : Z=");
     Serial.println(Compass_Offset_Z, DEC);
-  }
-}
-
-//---------------------------------------------------------------------------
-// Print Accelerometer details to serial
-void Print_Accel_Data(int detail_level)
-{
-  // Detail_Level of 1 = Print basic information 
-  // Detail_Level of 9 = Print all available information 
-  
-  if (detail_level==1 || detail_level==9){
-    Serial.print("Accel Center Ave");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave, 6);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave, 6);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave, 6);
-
-    Serial.print("Accel Center Ave Total");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave_Total);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave_Total);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave_Total);
-
-    Serial.print("Accel Center LPF");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_LPF, 6);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_LPF, 6);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_LPF, 6);
-    
-    float a_XZ, a_YZ;
-    a_XZ = atan2(Accel_X_Center_LPF, Accel_Z_Center_LPF);
-    a_YZ = atan2(Accel_Y_Center_LPF, Accel_Z_Center_LPF);
-    
-    Serial.print("Accel Center LPF - ATAN2 XZ = ");
-    Serial.print(a_XZ, 6);
-    Serial.print("\t ATAN2 YZ = ");
-    Serial.println(a_YZ, 6);
-    Serial.print("XZ + YZ = ");
-    Serial.println((a_XZ+a_YZ), 6);
-    
-    
-  }
-  
-  if (detail_level==9){
-    Serial.print("Accel X=");
-    Serial.print(Accel_X, DEC);
-    Serial.print("\t : Y=");
-    Serial.print(Accel_Y, DEC);
-    Serial.print("\t : Z=");
-    Serial.println(Accel_Z, DEC);
   }
 }
 
