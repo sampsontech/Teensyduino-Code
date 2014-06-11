@@ -1,0 +1,18 @@
+﻿Build started 11/06/2014 10:34:26 PM.
+     1>Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\PID Controller 3\PID Controller 3.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\PID Controller 3.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "PID Controller Class 2.cpp" main.cpp
+         main.cpp
+     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(11): error C2065: 'cout' : undeclared identifier
+     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(14): error C2065: 'cout' : undeclared identifier
+     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(15): error C2065: 'cout' : undeclared identifier
+         PID Controller Class 2.cpp
+     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\pid controller class 2.cpp(92): error C3861: 'fabs': identifier not found
+         Generating Code...
+     1>Done Building Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\PID Controller 3\PID Controller 3.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:02.70

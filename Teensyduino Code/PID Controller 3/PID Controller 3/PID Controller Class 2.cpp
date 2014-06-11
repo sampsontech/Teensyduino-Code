@@ -11,9 +11,7 @@
 *
 */
 
-#include <iostream>
-
-class PidController {
+class PIDController {
 private:
     // Define Term variables
     double   Proportional,
@@ -35,15 +33,14 @@ private:
     
     double   ErrorSum,
              LastError;
-protected:
+public:
     // Constructor and Destructor
     
     //TODO: Need to better define these to accept multiple overflow forms
-    PidController( double P, double I, double D, double IL );
+    PIDController( double P, double I, double D, double IL );
     
-    ~PidController();
+    ~PIDController();
 
-public:
     // Get values routines    
     double GetProportional() { return Proportional; }
     double GetIntegral() { return Integral; }
@@ -55,7 +52,7 @@ public:
 
     double GetIntegralLimit() { return IntegralLimit; }
     double GetDifferentialCycle() { return DifferentialCycle; }
-    double GetSetpoint() { return Setpoint; }
+    double GetSetPoint() { return SetPoint; }
   
     // Set values routines
     void SetProportional( double PT ) { Proportional = PT; }
@@ -64,7 +61,7 @@ public:
 
     void SetIntegralLimit( double IL ) { IntegralLimit = IL; }
     void SetDifferentialCycle( unsigned DC ) { DifferentialCycle = DC; }
-    void SetSetpoint( double SP ) { Setpoint = SP; }
+    void SetSetPoint( double SP ) { SetPoint = SP; }
     
     // Calculation and update routines
     double CalculateGain( double Position, double TimeDelta );
@@ -73,27 +70,27 @@ public:
 };
 
 // Constructor
-PidController:PidController (double kP, double kI, double kD, double IL) {
+PIDController::PIDController (double kP, double kI, double kD, double IL) {
 	ProportionalGain = kP;
-	IntergralGain = kI;
+	IntegralGain = kI;
 	DifferentialGain = kD;
-	IntergralLimit = IL;  
+	IntegralLimit = IL;  
 }
 
 // Destructor 
-PidController:~PidController () {};
+PIDController::~PIDController () {};
 
 // Calaculate Gain - My code - v2 - includes time period 
 // TODO: Validate TimeDelta or allow for oveeflow of TimeDelta presence
-double PidController::CalculateGain( double Position, double TimeDelta )
+double PIDController::CalculateGain( double Position, double TimeDelta )
 {
-    double Error = Setpoint - Position;
+    double Error = SetPoint - Position;
 
     Proportional = Error;
 
     Integral = Integral + Error * TimeDelta;
     if( fabs( Integral ) > IntegralLimit ) {
-       if( Integral => 0 )
+       if( Integral >= 0 )
            Integral = IntegralLimit;
        else
            Integral = -IntegralLimit;
@@ -103,15 +100,6 @@ double PidController::CalculateGain( double Position, double TimeDelta )
 
     LastError = Error;
 
-    Gain = (Proportional * ProportionalGain) + (Intergral * IntegralGain) + (Differential * DifferentialGain);
+    Gain = (Proportional * ProportionalGain) + (Integral * IntegralGain) + (Differential * DifferentialGain);
     return Gain;
-}
-
-void main () {
-	PIDController PIDX(1, 1, 1, 100);
-
-	for(int x=0; x<100; x++) {
-		cout << PIDX.CalaculateGain(x, 1);
-	}
-
 }
