@@ -25,7 +25,7 @@ private:
              
     double   IntegralLimit;
 
-    double   Setpoint,
+    double   SetPoint,
              Gain;
              
     unsigned long DifferentialCycle,
@@ -37,7 +37,7 @@ protected:
     // Constructor and Destructor
     
     //TODO: Need to better define these to accept multiple overflow forms
-    PidController( double kP, double kI, double kD, double lI, double cD );
+    PidController( double P, double I, double D, double IL );
     
     ~PidController();
 
@@ -71,7 +71,14 @@ public:
 };
 
 // Constructor
-PidController:PidController () {};
+PidController:PidController (double kP, double kI, double kD, double IL) {
+	ProportionalGain = kP;
+	IntergralGain = kI;
+	DifferentialGain = kD;
+	IntergralLimit = IL;
+
+			  
+}
 
 // Destructor 
 PidController:~PidController () {};
@@ -154,3 +161,15 @@ double PidController::CalculateGain_Orig( double position )
     return Gain;
 }
 
+void main () {
+	PIDController PIDX;
+	int x,y,z;
+
+	PIDX(1, 1, 1, 100);
+
+	for(x=0; x<100; x++) {
+		COUT << PIDX.CalaculateGain(x,1);
+
+	}
+
+}
