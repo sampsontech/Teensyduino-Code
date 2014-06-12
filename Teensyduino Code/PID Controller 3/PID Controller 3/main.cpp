@@ -1,10 +1,11 @@
 #include <iostream>
 
-#include "PID Controller Class 2.cpp"
+#include "PID Controller Class 2.hpp"
 
 using namespace std;
 
 void main () {
+
 	PIDController PIDX (1, 1, 1, 100);
 
 	int x;
