@@ -21,7 +21,7 @@ PIDController::PIDController (double kP, double kI, double kD, double IL) {
 }
 
 // Destructor 
-PIDController::~PIDController () {};
+PIDController::~PIDController () {}
 
 // Calaculate Gain - My code - v2 - includes time period 
 // TODO: Validate TimeDelta or allow for oveeflow of TimeDelta presence

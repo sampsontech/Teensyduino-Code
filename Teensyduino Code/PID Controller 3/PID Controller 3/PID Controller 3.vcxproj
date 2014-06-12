@@ -80,6 +80,10 @@
   <ItemGroup>
     <ClInclude Include="PID Controller Class 2.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="c:\program files\microsoft visual studio 10.0\vc\include\cmath" />
+    <None Include="c:\program files\microsoft visual studio 10.0\vc\include\iostream" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

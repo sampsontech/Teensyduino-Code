@@ -15,8 +15,6 @@
 #ifndef PIDCONTROLLER_H
 #define PIDCONTROLLER_H
 
-#include <cmath>
-
 class PIDController {
 private:
     // Define Term variables
@@ -42,10 +40,10 @@ private:
 public:
     // Constructor and Destructor
     
-    //TODO: Need to better define these to accept multiple overflow forms
-    PIDController( double P, double I, double D, double IL );
-    
-    ~PIDController();
+    // TODO: Need to better define these to accept multiple overflow forms
+    PIDController( double kP, double kI, double kD, double IL );
+	
+	~PIDController();
 
     // Get values routines    
     double GetProportional() { return Proportional; }

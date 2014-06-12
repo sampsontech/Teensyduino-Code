@@ -27,4 +27,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="c:\program files\microsoft visual studio 10.0\vc\include\cmath" />
+    <None Include="c:\program files\microsoft visual studio 10.0\vc\include\iostream" />
+  </ItemGroup>
 </Project>

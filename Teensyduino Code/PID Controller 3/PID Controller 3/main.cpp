@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "PID Controller Class 2.hpp"
 
