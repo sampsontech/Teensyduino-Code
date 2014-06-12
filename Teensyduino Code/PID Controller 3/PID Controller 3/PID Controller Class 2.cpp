@@ -10,6 +10,7 @@
 *
 *
 */
+#include <cmath>
 
 class PIDController {
 private:
@@ -89,6 +90,7 @@ double PIDController::CalculateGain( double Position, double TimeDelta )
     Proportional = Error;
 
     Integral = Integral + Error * TimeDelta;
+
     if( fabs( Integral ) > IntegralLimit ) {
        if( Integral >= 0 )
            Integral = IntegralLimit;

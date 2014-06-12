@@ -1,18 +1,22 @@
-﻿Build started 11/06/2014 10:34:26 PM.
+﻿Build started 12/06/2014 8:56:21 PM.
      1>Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\PID Controller 3\PID Controller 3.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Touching "Debug\PID Controller 3.unsuccessfulbuild".
        ClCompile:
-         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "PID Controller Class 2.cpp" main.cpp
-         main.cpp
-     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(11): error C2065: 'cout' : undeclared identifier
-     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(14): error C2065: 'cout' : undeclared identifier
-     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\main.cpp(15): error C2065: 'cout' : undeclared identifier
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "PID Controller Class 2.cpp"
          PID Controller Class 2.cpp
-     1>\\six\pub-writable\software_github_sync\teensyduino code\pid controller 3\pid controller 3\pid controller class 2.cpp(92): error C3861: 'fabs': identifier not found
-         Generating Code...
+       ManifestResourceCompile:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\PID Controller 3.exe.embed.manifest.res" "Debug\PID Controller 3_manifest.rc" 
+       Link:
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\Debug\PID Controller 3.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\PID Controller 3.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\Debug\PID Controller 3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\Debug\PID Controller 3.lib" /MACHINE:X86 "Debug\PID Controller 3.exe.embed.manifest.res"
+         Debug\main.obj
+         "Debug\PID Controller Class 2.obj"
+     1>PID Controller Class 2.obj : error LNK2005: "public: __thiscall PIDController::PIDController(double,double,double,double)" (??0PIDController@@QAE@NNNN@Z) already defined in main.obj
+     1>PID Controller Class 2.obj : error LNK2005: "public: __thiscall PIDController::~PIDController(void)" (??1PIDController@@QAE@XZ) already defined in main.obj
+     1>PID Controller Class 2.obj : error LNK2005: "public: double __thiscall PIDController::CalculateGain(double,double)" (?CalculateGain@PIDController@@QAENNN@Z) already defined in main.obj
+     1>\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\Debug\PID Controller 3.exe : fatal error LNK1169: one or more multiply defined symbols found
      1>Done Building Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 3\PID Controller 3\PID Controller 3.vcxproj" (build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:02.70
+Time Elapsed 00:00:03.82
