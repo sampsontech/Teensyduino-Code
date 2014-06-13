@@ -1,12 +1,10 @@
-﻿Build started 13/06/2014 9:00:17 PM.
+﻿Build started 13/06/2014 9:54:46 PM.
      1>Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\PID Controller 4\PID Controller 4.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "Debug\PID Controller 4.unsuccessfulbuild".
+         Creating "Debug\PID Controller 4.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "PID Controller Class 4.cpp" main.cpp
-         main.cpp
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "PID Controller Class 4.cpp"
          PID Controller Class 4.cpp
-         Generating Code...
        Link:
          c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\Debug\PID Controller 4.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\PID Controller 4.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\Debug\PID Controller 4.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\Debug\PID Controller 4.lib" /MACHINE:X86 Debug\main.obj
          "Debug\PID Controller Class 4.obj"
@@ -14,3 +12,11 @@
          PID Controller 4.vcxproj -> \\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\Debug\PID Controller 4.exe
        Manifest:
          C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\Debug\PID Controller 4.exe;#1" /manifest "Debug\PID Controller 4.exe.intermediate.manifest"
+       FinalizeBuildStatus:
+         Deleting file "Debug\PID Controller 4.unsuccessfulbuild".
+         Touching "Debug\PID Controller 4.lastbuildstate".
+     1>Done Building Project "\\Six\pub-writable\Software_GitHub_Sync\Teensyduino Code\PID Controller 4\PID Controller 4\PID Controller 4.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.60

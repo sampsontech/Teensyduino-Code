@@ -41,17 +41,19 @@ private:
              LastError;
 public:
     
-		// Constructor
+	// Constructor
     // TODO: Need to better define these to accept multiple overflow forms
-		PIDController (double kP, double kI, double kD, double IL) {
-			ProportionalGain = kP;
-			IntegralGain = kI;
-			DifferentialGain = kD;
-			IntegralLimit = IL;  
-		}
+	PIDController (double kP, double kI, double kD, double IL) {
+		ProportionalGain = kP;
+		IntegralGain = kI;
+		DifferentialGain = kD;
+		IntegralLimit = IL;
 
-		// Destructor 
-		~PIDController () {}
+		Integral = 0;
+	}
+
+	// Destructor 
+	~PIDController () {}
 
 /*
     // Calculation and update routines
@@ -59,28 +61,28 @@ public:
     double CalculateGain_v1( double Position );
     double CalculateGain_Orig( double Position );
 */
-		// Calaculate Gain - My code - v2 - includes time period 
-		// TODO: Validate TimeDelta or allow for oveeflow of TimeDelta presence
-		double PIDController::CalculateGain( double Position, double TimeDelta )
-		{
-			double Error = SetPoint - Position;
-			Proportional = Error;
+	// Calaculate Gain - My code - v2 - includes time period 
+	// TODO: Validate TimeDelta or allow for oveeflow of TimeDelta presence
+	double CalculateGain( double Position, double TimeDelta )
+	{
+		double Error = SetPoint - Position;
+		Proportional = Error;
 
-			Integral = Integral + Error * TimeDelta;
-    	if( fabs( Integral ) > IntegralLimit ) {
- 		  	if( Integral >= 0 )
-   		  	Integral = IntegralLimit;
-				else
-      		Integral = -IntegralLimit;
-     	}
+		Integral = Integral + Error * TimeDelta;
+	 	//if( fabs( Integral ) > IntegralLimit ) {
+ 		//  	if( Integral >= 0 )
+   	  	//	Integral = IntegralLimit;
+		//		else
+		//	Integral = -IntegralLimit;
+		//}
 
- 		  Differential = ( Error - LastError ) / TimeDelta;
+ 		Differential = ( Error - LastError ) / TimeDelta;
 
   		LastError = Error;
 
-			Gain = (Proportional * ProportionalGain) + (Integral * IntegralGain) + (Differential * DifferentialGain);
-			return Gain;
-		}
+		Gain = (Proportional * ProportionalGain) + (Integral * IntegralGain) + (Differential * DifferentialGain);
+		return Gain;
+	}
 
     // Get values routines    
     double GetProportional() { return Proportional; }
