@@ -49,32 +49,29 @@ public:
 		DifferentialGain = kD;
 		IntegralLimit = IL;
 
+		Proportional = 0 ;
 		Integral = 0;
+		Differential = 0;
+		LastError = 0;
 	}
 
 	// Destructor 
 	~PIDController () {}
 
-/*
-    // Calculation and update routines
-    double CalculateGain( double Position, double TimeDelta );
-    double CalculateGain_v1( double Position );
-    double CalculateGain_Orig( double Position );
-*/
 	// Calaculate Gain - My code - v2 - includes time period 
 	// TODO: Validate TimeDelta or allow for oveeflow of TimeDelta presence
-	double CalculateGain( double Position, double TimeDelta )
-	{
+	double CalculateGain( double Position, double TimeDelta ) {
 		double Error = SetPoint - Position;
 		Proportional = Error;
 
-		Integral = Integral + Error * TimeDelta;
-	 	//if( fabs( Integral ) > IntegralLimit ) {
- 		//  	if( Integral >= 0 )
-   	  	//	Integral = IntegralLimit;
-		//		else
-		//	Integral = -IntegralLimit;
-		//}
+		Integral = Integral + ( Error * TimeDelta );
+
+		if( fabs( Integral ) > IntegralLimit ) {
+ 		  	if( Integral >= 0 )
+   	  		Integral = IntegralLimit;
+				else
+			Integral = -IntegralLimit;
+		}
 
  		Differential = ( Error - LastError ) / TimeDelta;
 

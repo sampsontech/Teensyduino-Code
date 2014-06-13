@@ -6,16 +6,16 @@ using namespace std;
 
 void main () {
 
-	PIDController PIDX (1, 1, 1, 999999);
+	PIDController PIDX (0.8, 0.5, 0.5, 500);
 	PIDX.SetSetPoint(1000);
 
 	int x;
-	double current = 0;
+	double current = 1;
 
 	cout << "Start" << endl;
 
 	for (x=0; x<100; x++) {
-		current += PIDX.CalculateGain(current, 1);
+		current += 0.53 * PIDX.CalculateGain(current, 1);
 		cout << "# " << x;
 		cout << " - Current = " << current;
 		cout << " - SetPoint = " << PIDX.GetSetPoint();
