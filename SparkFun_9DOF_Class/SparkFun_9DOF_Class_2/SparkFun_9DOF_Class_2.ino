@@ -1,7 +1,36 @@
+// Wire.h is here for now but should be removed.
+// Or at least a load guard should be placed around it!!
 #include <Wire.h>
+
+
+/*
+* SparkFun 9DOF Senser Board Class
+*
+* This class provides basic access to the sensors on the SparkFun 9DOF board  
+*
+* Requirements:  - "Wire.h" needs to be included by the parent code
+*                - A pointer to the Wire object needs to be passed to the constructor function
+*
+* TODO:  All of it :-)
+*        Currently "#include <Wire.h>" is in this file. It needs to ultimately be removed
+*        in favour of 
+*
+* REF:   https://www.sparkfun.com/products/10724
+*
+*/
+
+
+#ifndef SPARKFUN_9DOF_CLASS  // Load guard for the whole class
+#define SPARKFUN_9DOF_CLASS
+
+
+#ifndef ADXL345_HAL_CLASS    // Load guard for the ADXL345_HAL sub class
+#define ADXL345_HAL_CLASS
 
 class ADXL345_HAL {
   private:
+    TwoWire *I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    
   protected:
   public:
     // set the variables for the ADXL345 Accelerometer
@@ -15,211 +44,187 @@ class ADXL345_HAL {
     long Accel_X_Center_Ave_Total, Accel_Y_Center_Ave_Total, Accel_Z_Center_Ave_Total;
     float Accel_X_Center_LPF, Accel_Y_Center_LPF, Accel_Z_Center_LPF;
         
-    ADXL345_HAL();               // Class Constructor			
-    ~ADXL345_HAL();              // Class Destructor
+    // Constructor
+    ADXL345_HAL() { }
 
-    void Init_Dev();             // Initialise the device
-    void Read_Accel();           // Read all the sensors
-    void Accel_Calib_Ave();      // Calibrate the Accelerometer - "Average" method
-    void Accel_Calib_LPF();      // Calibrate the Accelerometer - "Low Pass Filter" method
-    void Print_Accel_Data(int);  // Print Accelerometer details to serial
-
-};  // End of class
-
-  
-//---------------------------------------------------------------------------
-// Constructor
-ADXL345_HAL::ADXL345_HAL() { }
-
-//---------------------------------------------------------------------------
-// Destructor
-ADXL345_HAL::~ADXL345_HAL() { }
+    // Destructor
+    ~ADXL345_HAL() { }
  
-//---------------------------------------------------------------------------
-// Initialise the device
-void ADXL345_HAL::Init_Dev() {
-  // Setup the ADXL345 Accelerometer
-  Serial.print("Setting up ADXL345 Accelerometer...");
+    // Initialise the device
+    void Init_Dev(TwoWire *I2C_Ptr) {
 
-  //Put the sensor into measurement mode. The data sheet recommends that you first Reset, then Sleep mode then Measurement mode.
-  Wire.beginTransmission(AccelAddress); 
-  Wire.write(0x2D);  //Reset the POWER_CTL (0x2D) register.
-  Wire.write(0b00000000);
-  Wire.endTransmission();
+      I2C = I2C_Ptr;       // Pointer to the "Wire" I2C object 
+    
+      // Setup the ADXL345 Accelerometer
+      Serial.print("Setting up ADXL345 Accelerometer...");
 
-  Wire.beginTransmission(AccelAddress); 
-  Wire.write(0x2D);  //Put the ADXL345 into StandBy mode by writing 0x10 to the POWER_CTL (0x2D) register.
-  Wire.write(0b00010000);
-  Wire.endTransmission();
+      //Put the sensor into measurement mode. The data sheet recommends that you first Reset, then Sleep mode then Measurement mode.
+      I2C->beginTransmission(AccelAddress); 
+      I2C->write(0x2D);  //Reset the POWER_CTL (0x2D) register.
+      I2C->write(0b00000000);
+      I2C->endTransmission();
 
-  Wire.beginTransmission(AccelAddress); 
-  Wire.write(0x2D);  //Put the ADXL345 into Measurement Mode by writing 0x08 to the POWER_CTL (0x2D) register.
-  Wire.write(0b00001000);
-  Wire.endTransmission();
+      I2C->beginTransmission(AccelAddress); 
+      I2C->write(0x2D);  //Put the ADXL345 into StandBy mode by writing 0x10 to the POWER_CTL (0x2D) register.
+      I2C->write(0b00010000);
+      I2C->endTransmission();
 
-  // force a calibration event
-  Accel_X_Center_Ave = 99;
+      I2C->beginTransmission(AccelAddress); 
+      I2C->write(0x2D);  //Put the ADXL345 into Measurement Mode by writing 0x08 to the POWER_CTL (0x2D) register.
+      I2C->write(0b00001000);
+      I2C->endTransmission();
+
+      // force a calibration event
+      Accel_X_Center_Ave = 99;
 
 
-  //Set the G force range the sensor will work in 
-  Wire.beginTransmission(AccelAddress); 
-  Wire.write(0x31);  //Put the ADXL345 into +/- 4G range by writing the value 0x01 to the DATA_FORMAT (0x31) register.
-  Wire.write(0b00000001);  //(Default is +/-2G range
-  Wire.endTransmission();
+      //Set the G force range the sensor will work in 
+      I2C->beginTransmission(AccelAddress); 
+      I2C->write(0x31);  //Put the ADXL345 into +/- 4G range by writing the value 0x01 to the DATA_FORMAT (0x31) register.
+      I2C->write(0b00000001);  //(Default is +/-2G range
+      I2C->endTransmission();
 
-  Serial.println("Done");
-  delay(100);
-}
-
-//---------------------------------------------------------------------------
-// Read the ADXL345 Accelerometer
-void ADXL345_HAL::Read_Accel() {
-  Wire.beginTransmission(AccelAddress);  // start transmission to device 
-  Wire.write(0x32);                       // point to the first data register DATAX0
-  Wire.endTransmission();                // end transmission
-
-  // read 6 byte, from address 32 (Data Registers)
-  Wire.beginTransmission(AccelAddress);  // start transmission to device 
-  Wire.requestFrom(AccelAddress, 6);
-  if (Wire.available() >= 6) {
-    Accel_X = Wire.read() + (Wire.read() * 256);  // X axis LSB + X axis MSB * 256
-    Accel_Y = Wire.read() + (Wire.read() * 256);  // Y axis LSB + Y axis MSB * 256
-    Accel_Z = Wire.read() + (Wire.read() * 256);  // Z axis LSB + Z axis MSB * 256
-  }
-
-  // Incorrent number of returned bytes
-  else {
-    Serial.println("Recieving incorrect amount of bytes from Accelerometer");
-    while(Wire.available()) {
-      Serial.print("data byte = ");
-      Serial.println(Wire.read(), DEC);    //print the returned number as a decimal
+      Serial.println("Done");
+      delay(100);
     }
-  }
-  Wire.endTransmission();
-}
 
-//---------------------------------------------------------------------------
-// Calibrate the Accelerometer - "Average" method
-void ADXL345_HAL::Accel_Calib_Ave() {
-  Serial.println("Performing a Accelometer calibration using the Averaging method");
+
+    // Read the ADXL345 Accelerometer
+    void Read_Accel() {
+      I2C->beginTransmission(AccelAddress);  // start transmission to device 
+      I2C->write(0x32);                       // point to the first data register DATAX0
+      I2C->endTransmission();                // end transmission
+
+      // read 6 byte, from address 32 (Data Registers)
+      I2C->beginTransmission(AccelAddress);  // start transmission to device 
+      I2C->requestFrom(AccelAddress, 6);
+      if (I2C->available() >= 6) {
+        Accel_X = I2C->read() + (I2C->read() * 256);  // X axis LSB + X axis MSB * 256
+        Accel_Y = I2C->read() + (I2C->read() * 256);  // Y axis LSB + Y axis MSB * 256
+        Accel_Z = I2C->read() + (I2C->read() * 256);  // Z axis LSB + Z axis MSB * 256
+      }
+
+      // Incorrent number of returned bytes
+      else {
+        Serial.println("Recieving incorrect amount of bytes from Accelerometer");
+        while(I2C->available()) {
+          Serial.print("data byte = ");
+          Serial.println(I2C->read(), DEC);    //print the returned number as a decimal
+        }
+      }
+      I2C->endTransmission();
+    }
+
+    // Calibrate the Accelerometer - "Average" method
+    void Accel_Calib_Ave() {
+      Serial.println("Performing a Accelometer calibration using the Averaging method");
   
-  Accel_X_Center_Ave = 0;
-  Accel_X_Center_Ave_Total =0;
-  Accel_Y_Center_Ave = 0;
-  Accel_Y_Center_Ave_Total =0;
-  Accel_Z_Center_Ave = 0;
-  Accel_Z_Center_Ave_Total =0;
+      Accel_X_Center_Ave = 0;
+      Accel_X_Center_Ave_Total =0;
+      Accel_Y_Center_Ave = 0;
+      Accel_Y_Center_Ave_Total =0;
+      Accel_Z_Center_Ave = 0;
+      Accel_Z_Center_Ave_Total =0;
     
-  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
-    Serial.print(".");
+      for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+        Serial.print(".");
     
-    Read_Accel();
+        Read_Accel();
       
-    // Summ up the reads for the average
-    Accel_X_Center_Ave_Total += Accel_X;
-    Accel_Y_Center_Ave_Total += Accel_Y;
-    Accel_Z_Center_Ave_Total += Accel_Z;
-  }
+        // Summ up the reads for the average
+        Accel_X_Center_Ave_Total += Accel_X;
+        Accel_Y_Center_Ave_Total += Accel_Y;
+        Accel_Z_Center_Ave_Total += Accel_Z;
+      }
 
-  // Calc the average over the sample
-  Accel_X_Center_Ave = (float)Accel_X_Center_Ave_Total / Accel_Reading_Count;
-  Accel_Y_Center_Ave = (float)Accel_Y_Center_Ave_Total / Accel_Reading_Count;
-  Accel_Z_Center_Ave = (float)Accel_Z_Center_Ave_Total / Accel_Reading_Count;
+      // Calc the average over the sample
+      Accel_X_Center_Ave = (float)Accel_X_Center_Ave_Total / Accel_Reading_Count;
+      Accel_Y_Center_Ave = (float)Accel_Y_Center_Ave_Total / Accel_Reading_Count;
+      Accel_Z_Center_Ave = (float)Accel_Z_Center_Ave_Total / Accel_Reading_Count;
 
-  Serial.println("Done");
+      Serial.println("Done");
 }  
 
-//---------------------------------------------------------------------------
-// Calibrate the Accelerometer - "Low Pass Filter" method
-void ADXL345_HAL::Accel_Calib_LPF()
-{
-  Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
+    // Calibrate the Accelerometer - "Low Pass Filter" method
+    void Accel_Calib_LPF()
+    {
+      Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
   
-  Accel_X_Center_LPF = 0;
-  Accel_Y_Center_LPF = 0;
-  Accel_Z_Center_LPF = 0;
+      Accel_X_Center_LPF = 0;
+      Accel_Y_Center_LPF = 0;
+      Accel_Z_Center_LPF = 0;
     
-  for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
-    Serial.print(".");
+      for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+        Serial.print(".");
     
-    Read_Accel();
+        Read_Accel();
     
-    // Take 90% of the previous cumulative value and 10% on the current reading 
-    // (Bit like averaging
-    Accel_X_Center_LPF = Accel_X_Center_LPF * 0.9f + Accel_X * 0.1f;
-    Accel_Y_Center_LPF = Accel_Y_Center_LPF * 0.9f + Accel_Y * 0.1f;
-    Accel_Z_Center_LPF = Accel_Z_Center_LPF * 0.9f + Accel_Z * 0.1f;
-  }
+        // Take 90% of the previous cumulative value and 10% on the current reading 
+        // (Bit like averaging
+        Accel_X_Center_LPF = Accel_X_Center_LPF * 0.9f + Accel_X * 0.1f;
+        Accel_Y_Center_LPF = Accel_Y_Center_LPF * 0.9f + Accel_Y * 0.1f;
+        Accel_Z_Center_LPF = Accel_Z_Center_LPF * 0.9f + Accel_Z * 0.1f;
+      }
 
-  Serial.println("Done");
-}  
+      Serial.println("Done");
+    }  
 
-//---------------------------------------------------------------------------
-// Print Accelerometer details to serial
-void ADXL345_HAL::Print_Accel_Data(int detail_level) {
-  // Detail_Level of 1 = Print basic information 
-  // Detail_Level of 9 = Print all available information 
+
+    // Print Accelerometer details to serial
+    void Print_Accel_Data(int detail_level) {
+      // Detail_Level of 1 = Print basic information 
+      // Detail_Level of 9 = Print all available information 
   
-  if (detail_level==1 || detail_level==9){
-    Serial.print("Accel Center Ave");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave, 6);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave, 6);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave, 6);
+      if (detail_level==1 || detail_level==9){
+        Serial.print("Accel Center Ave");
+        Serial.print("\t X=");
+        Serial.print(Accel_X_Center_Ave, 6);
+        Serial.print("\t Y=");
+        Serial.print(Accel_Y_Center_Ave, 6);
+        Serial.print("\t Z=");
+        Serial.println(Accel_Z_Center_Ave, 6);
 
-    Serial.print("Accel Center Ave Total");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave_Total);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave_Total);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave_Total);
+        Serial.print("Accel Center Ave Total");
+        Serial.print("\t X=");
+        Serial.print(Accel_X_Center_Ave_Total);
+        Serial.print("\t Y=");
+        Serial.print(Accel_Y_Center_Ave_Total);
+        Serial.print("\t Z=");
+        Serial.println(Accel_Z_Center_Ave_Total);
 
-    Serial.print("Accel Center LPF");
-    Serial.print("\t X=");
-    Serial.print(Accel_X_Center_LPF, 6);
-    Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_LPF, 6);
-    Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_LPF, 6);
+        Serial.print("Accel Center LPF");
+        Serial.print("\t X=");
+        Serial.print(Accel_X_Center_LPF, 6);
+        Serial.print("\t Y=");
+        Serial.print(Accel_Y_Center_LPF, 6);
+        Serial.print("\t Z=");
+        Serial.println(Accel_Z_Center_LPF, 6);
     
-    float a_XZ, a_YZ;
-    a_XZ = atan2(Accel_X_Center_LPF, Accel_Z_Center_LPF);
-    a_YZ = atan2(Accel_Y_Center_LPF, Accel_Z_Center_LPF);
+        float a_XZ, a_YZ;
+        a_XZ = atan2(Accel_X_Center_LPF, Accel_Z_Center_LPF);
+        a_YZ = atan2(Accel_Y_Center_LPF, Accel_Z_Center_LPF);
     
-    Serial.print("Accel Center LPF - ATAN2 XZ = ");
-    Serial.print(a_XZ, 6);
-    Serial.print("\t ATAN2 YZ = ");
-    Serial.println(a_YZ, 6);
-    Serial.print("XZ + YZ = ");
-    Serial.println((a_XZ+a_YZ), 6);
-  }
+        Serial.print("Accel Center LPF - ATAN2 XZ = ");
+        Serial.print(a_XZ, 6);
+        Serial.print("\t ATAN2 YZ = ");
+        Serial.println(a_YZ, 6);
+        Serial.print("XZ + YZ = ");
+        Serial.println((a_XZ+a_YZ), 6);
+      }
   
-  if (detail_level==9){
-    Serial.print("Accel X=");
-    Serial.print(Accel_X, DEC);
-    Serial.print("\t : Y=");
-    Serial.print(Accel_Y, DEC);
-    Serial.print("\t : Z=");
-    Serial.println(Accel_Z, DEC);
-  }
-}
+      if (detail_level==9){
+        Serial.print("Accel X=");
+        Serial.print(Accel_X, DEC);
+        Serial.print("\t : Y=");
+        Serial.print(Accel_Y, DEC);
+        Serial.print("\t : Z=");
+        Serial.println(Accel_Z, DEC);
+      }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
+#endif  // ADXL345_HAL_CLASS
+  
 
 
 
@@ -267,8 +272,8 @@ void setup()
   Wire.begin();
 
 // Initialize accelerometer object 
-Accel.Init_Dev();
-
+  // Pass the "Wire" I2C object that it is to use 
+  Accel.Init_Dev(&Wire);
 
 // Setup the HMC5883L Compass
   Serial.print("Setting up HMC5883L Compass...");
@@ -552,4 +557,6 @@ void Print_Gyro_Data()
   Serial.print("Gyro Adjusted Temp=");
   Serial.println( (((float)Gyro_T+13200)/280)+35 );  //35degrees offset = -13200
 }
+
+#endif  // SPARKFUN_9DOF_CLASS
 
