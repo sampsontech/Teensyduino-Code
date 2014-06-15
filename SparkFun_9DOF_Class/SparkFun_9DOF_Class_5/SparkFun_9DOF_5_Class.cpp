@@ -6,13 +6,64 @@
 * Requirements:  - "Wire.h" needs to be included by the parent code
 *                - A pointer to the Wire object needs to be passed to the constructor function
 *
-* TODO:  - ??
+* TODO:  - Rationalize classes to use the Support class functions (I2C WB and RB)
 *
 * REF:   https://www.sparkfun.com/products/10724
 *
 */
 
 #include <Wire.h>
+
+// ---------------------------------------------------------------------------
+
+// SparkFun 9 DOF Class Support Class
+#ifndef SF9DOF_SUPPORT_CLASS                  // Load guard for the ADXL345_HAL sub class
+#define SF9DOF_SUPPORT_CLASS
+
+class SF9DOF_Support {
+  private:
+  protected:
+  public:
+        
+    // Constructor
+    SF9DOF_Support() { }
+
+    // Destructor
+    ~SF9DOF_Support() { }
+ 
+    // Write a byte to the I2C bus
+    void I2C_WB(TwoWire * I2C, unsigned char Addr, unsigned char Reg, unsigned char Data) {
+      I2C->beginTransmission(Addr);           // Start the transmission
+      I2C->write(Reg);                        // Point to the data register to read
+      I2C->write(Data);                       // Write the data to the register
+      I2C->endTransmission();                 // End transmission
+    }
+
+    // Read multiple bytes from the I2C bus
+    bool I2C_RB_Multi(TwoWire * I2C, unsigned char Addr, unsigned char Reg, int Num, unsigned char Data[]) {
+      bool RC = false;                        // Return Code
+
+      // Point to the first data register to read from
+      I2C->beginTransmission(Addr);           // Start transmission to device 
+      I2C->write(Reg);                        // Point to the data register to read
+      I2C->endTransmission();                 // End transmission
+
+      // read the data registers
+      I2C->beginTransmission(Addr);           // Start transmission to device 
+      I2C->requestFrom(Addr, (uint8_t) Num);  // Ask for 1 byte of data
+      if (I2C->available() >= Num) {          // Check if there is enough data to read
+        for(int x = 0; x < Num; x++) {        // Loop through the returned data
+          Data[x] = I2C->read();              // Read the data
+        }
+        RC = true;                            // Success - flag as such
+      }
+
+      // End the transmission and return status
+      I2C->endTransmission();                 // End transmission
+      return RC;                              // Return the Return Code
+    }
+};
+#endif  // SF9DOF_SUPPORT_CLASS
 
 // ---------------------------------------------------------------------------
 
@@ -23,6 +74,7 @@
 class ADXL345_HAL {
   private:
     TwoWire * I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    SF9DOF_Support SFS;       // SparkFun 9DOF Support Class object
     
   protected:
   public:
@@ -57,7 +109,7 @@ class ADXL345_HAL {
       // I2C->write(0b00000000);
       // I2C->endTransmission();
 
-      SF9DOF_Support::I2C_WB(TwoWire * I2C, AccelAddress, 0x2D, 0b00000000)
+      SFS.I2C_WB(I2C, AccelAddress, 0x2D, 0b00000000);
 
       I2C->beginTransmission(AccelAddress); 
       I2C->write(0x2D);  //Put the ADXL345 into StandBy mode by writing 0x10 to the POWER_CTL (0x2D) register.
@@ -544,52 +596,4 @@ class ITG3200_HAL {
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 
-// SparkFun 9 DOF Class Support Class
-#ifndef SF9DOF_SUPPORT_CLASS                  // Load guard for the ADXL345_HAL sub class
-#define SF9DOF_SUPPORT_CLASS
 
-class SF9DOF_Support {
-  private:
-  protected:
-  public:
-        
-    // Constructor
-    SF9DOF_Support() { }
-
-    // Destructor
-    ~SF9DOF_Support() { }
- 
-    // Write a byte to the I2C bus
-    void I2C_WB(TwoWire * I2C, unsigned char Addr, unsigned char Reg, unsigned char Data) {
-      I2C->beginTransmission(Addr);           // Start the transmission
-      I2C->write(Reg);                        // Point to the data register to read
-      I2C->write(Data);                       // Write the data to the register
-      I2C->endTransmission();                 // End transmission
-    }
-
-    // Read multiple bytes from the I2C bus
-    bool I2C_RB_Multi(TwoWire * I2C, unsigned char Addr, unsigned char Reg, int Num, unsigned char Data[]) {
-      bool RC = false;                        // Return Code
-
-      // Point to the first data register to read from
-      I2C->beginTransmission(Addr);           // Start transmission to device 
-      I2C->write(Reg);                        // Point to the data register to read
-      I2C->endTransmission();                 // End transmission
-
-      // read the data registers
-      I2C->beginTransmission(Addr);           // Start transmission to device 
-      I2C->requestFrom(Addr, (uint8_t) Num);  // Ask for 1 byte of data
-      if (I2C->available() >= Num) {          // Check if there is enough data to read
-        for(int x = 0; x < Num; x++) {        // Loop through the returned data
-          Data[x] = I2C->read();              // Read the data
-        }
-        RC = true;                            // Success - flag as such
-      }
-
-      // End the transmission and return status
-      I2C->endTransmission();                 // End transmission
-      return RC;                              // Return the Return Code
-    }
-
-};
-#endif  // SPARKFUN_9DOF_CLASS
