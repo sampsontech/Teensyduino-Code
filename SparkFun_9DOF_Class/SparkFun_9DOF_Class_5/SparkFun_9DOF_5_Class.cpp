@@ -15,11 +15,6 @@
 
 // ---------------------------------------------------------------------------
 
-#ifndef SPARKFUN_9DOF_CLASS  // Load guard for the whole file
-#define SPARKFUN_9DOF_CLASS
-
-// ---------------------------------------------------------------------------
-
 // ADXL345 Accelerometer
 #ifndef ADXL345_HAL_CLASS    // Load guard for the ADXL345_HAL sub class
 #define ADXL345_HAL_CLASS
