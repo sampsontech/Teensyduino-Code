@@ -6,9 +6,8 @@
 * Requirements:  - "Wire.h" needs to be included by the parent code
 *                - A pointer to the Wire object needs to be passed to the constructor function
 *
-* TODO:  All of it :-)
-*        Currently "#include <Wire.h>" is in this file. It needs to ultimately be removed
-*        in favour of 
+* TODO:  - When the wrong number of returned bytes from the Wire.Available function, can those
+*          bytes be ignored ordo they need to read in and then discarded???
 *
 * REF:   https://www.sparkfun.com/products/10724
 *
@@ -566,15 +565,15 @@ class SF9DOF_Support {
  
     // Write a byte to the I2C bus
     void I2C_WB(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg, unsigned char Data) {
-      I2C->beginTransmission(Addr); 
-      I2C->write(Reg);
-      I2C->write(Data);
-      I2C->endTransmission();
+      I2C->beginTransmission(Addr);   // Start the transmission
+      I2C->write(Reg);                // Point to the data register to read
+      I2C->write(Data);               // Write the data to the register
+      I2C->endTransmission();         // End transmission
     }
 
     // Read a byte from the I2C bus
     unsigned char I2C_RB(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg) {
-      unsigned char RB = 0;                    // Hold returned data
+      unsigned char RB = 0;           // Hold returned data
 
       // Point to the data register to read from
       I2C->beginTransmission(Addr);   // Start transmission to device 
@@ -588,11 +587,13 @@ class SF9DOF_Support {
         RB = I2C->read();             // Read the byte
       }
       I2C->endTransmission();         // End transmission
+
+      return RB;                      // Return the read byte
     }
 
-    // Read 6 bytes from the I2C bus
-    unsigned char[6] I2C_RB6(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg, int Num) {
-      unsigned char[6] RB;            // Hold returned data
+    // Read multiple bytes from the I2C bus
+    unsigned char[] I2C_RB(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg, int Num) {
+      unsigned char RB[Num];          // Hold returned data
 
       // Point to the first data register to read from
       I2C->beginTransmission(Addr);   // Start transmission to device 
@@ -601,8 +602,8 @@ class SF9DOF_Support {
 
       // read the data registers
       I2C->beginTransmission(Addr);   // Start transmission to device 
-      I2C->requestFrom(Addr, Num);      // Ask for 1 byte of data
-      if (I2C->available() >= Num) {    // Check if there is enough data to read
+      I2C->requestFrom(Addr, Num);    // Ask for 1 byte of data
+      if (I2C->available() >= Num) {  // Check if there is enough data to read
         for(int x = 0; x < Num; x++;) { RB[x] = I2C->read() }   // Read the data
       }
       else {                          // Incorrent number of returned bytes
@@ -612,49 +613,9 @@ class SF9DOF_Support {
         while(I2C->available()) { RB[0] = I2C->read(); }    // clear the returned data buffer
       }
       I2C->endTransmission();         // End transmission
+      
+      return RB[];                    // Return the read bytes
     }
 
-
-
-
-
-//---------------- Functions 
-//reads num bytes starting from address register on device in to buff array 
-void readFrom(int device, byte address, int num, byte buff[]) { 
-  Wire.beginTransmission(device); //start transmission to device  
-  Wire.send(address);        //sends address to read from 
-  Wire.endTransmission(); //end transmission 
-  
-    Wire.beginTransmission(device); //start transmission to device 
-  Wire.requestFrom(device, num);    // request 6 bytes from device 
-  
-  int i = 0; 
-  while(Wire.available())    //device may send less than requested (abnormal) 
-  {  
-    buff[i] = Wire.receive(); // receive a byte 
-    i++; 
-  } 
-  Wire.endTransmission(); //end transmission 
-}
-
-//Writes val to address register on device 
-void writeTo(int device, byte address, byte val) { 
-  Wire.beginTransmission(device); //start transmission to device  
-  Wire.send(address);        // send register address 
-  Wire.send(val);        // send value to write 
-  Wire.endTransmission(); //end transmission 
-} 
-
-
-
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
-
-
-
-
-
-
+};
 #endif  // SPARKFUN_9DOF_CLASS
