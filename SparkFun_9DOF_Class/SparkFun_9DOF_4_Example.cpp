@@ -1,9 +1,9 @@
 /*
 *    SparkFun 9DOF eample code that uses the SparkFun 9DOF class to
-*    read the sensors, prform some basic calculations and display
+*    read the sensors, perform some basic calculations and display
 *    the results
 *
-*    Requirements:
+*    Requirements:  - "Wire" I2C library
 *
 *    TODO:
 *
@@ -12,7 +12,7 @@
 */
 
 #include <Wire.h>
-#include "SparkFun_9DOF_Class.cpp"
+#include "SparkFun_9DOF_4_Class.cpp"
 
 // Define accelerometer object 
 ADXL345_HAL Accel;
