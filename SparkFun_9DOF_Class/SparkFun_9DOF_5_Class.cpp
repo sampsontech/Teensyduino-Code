@@ -27,7 +27,7 @@
 
 class ADXL345_HAL {
   private:
-    TwoWire *I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    TwoWire * I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
     
   protected:
   public:
@@ -49,7 +49,7 @@ class ADXL345_HAL {
     ~ADXL345_HAL() { }
  
     // Initialise the device
-    void Init_Dev(TwoWire *I2C_Ptr) {
+    void Init_Dev(TwoWire * I2C_Ptr) {
 
       I2C = I2C_Ptr;       // Pointer to the "Wire" I2C object 
     
@@ -227,7 +227,7 @@ class ADXL345_HAL {
 
 class HMC5883L_HAL {
   private:
-    TwoWire *I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    TwoWire * I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
     
   protected:
   public:
@@ -257,7 +257,7 @@ class HMC5883L_HAL {
     ~HMC5883L_HAL() { }
  
     // Initialise the device
-    void Init_Dev(TwoWire *I2C_Ptr) {
+    void Init_Dev(TwoWire * I2C_Ptr) {
 
       I2C = I2C_Ptr;       // Pointer to the "Wire" I2C object 
     
@@ -312,7 +312,6 @@ class HMC5883L_HAL {
         Compass_Raw_Z = (I2C->read() * 256) + I2C->read();  // Z axis MSB * 256 + Z axis LSB
         Compass_Raw_Y = (I2C->read() * 256) + I2C->read();  // Y axis MSB * 256 + Y axis LSB
       }
-
   
       // Incorrent number of returned bytes
       else {
@@ -453,7 +452,7 @@ class HMC5883L_HAL {
 
 class ITG3200_HAL {
   private:
-    TwoWire *I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    TwoWire * I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
     
   protected:
   public:
@@ -472,7 +471,7 @@ class ITG3200_HAL {
     ~ITG3200_HAL() { }
  
     // Initialise the device
-    void Init_Dev(TwoWire *I2C_Ptr) {
+    void Init_Dev(TwoWire * I2C_Ptr) {
 
       I2C = I2C_Ptr;       // Pointer to the "Wire" I2C object 
     
@@ -542,5 +541,120 @@ class ITG3200_HAL {
 
 };
 #endif  // ITG3200_HAL_CLASS
+
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+// SparkFun 9 DOF Class Support Class
+#ifndef SF9DOF_SUPPORT_CLASS    // Load guard for the ADXL345_HAL sub class
+#define SF9DOF_SUPPORT_CLASS
+
+class SF9DOF_Support {
+  private:
+//    TwoWire * I2C;            // Hold pointer to the "Wire" I2C object which was declared/created by the parent
+    
+  protected:
+  public:
+        
+    // Constructor
+    SF9DOF_Support() { }
+
+    // Destructor
+    ~SF9DOF_Support() { }
+ 
+    // Write a byte to the I2C bus
+    void I2C_WB(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg, unsigned char Data) {
+      I2C->beginTransmission(Addr); 
+      I2C->write(Reg);
+      I2C->write(Data);
+      I2C->endTransmission();
+    }
+
+    // Read a byte from the I2C bus
+    unsigned char I2C_RB(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg) {
+      unsigned char RB = 0;                    // Hold returned data
+
+      // Point to the data register to read from
+      I2C->beginTransmission(Addr);   // Start transmission to device 
+      I2C->write(Reg);                // Point to the data register to read
+      I2C->endTransmission();         // End transmission
+
+      // read the byte from data register
+      I2C->beginTransmission(Addr);   // Start transmission to device 
+      I2C->requestFrom(Addr, 1);      // Ask for 1 byte of data
+      if (I2C->available() > 0) {     // Check if there is any data to read
+        RB = I2C->read();             // Read the byte
+      }
+      I2C->endTransmission();         // End transmission
+    }
+
+    // Read 6 bytes from the I2C bus
+    unsigned char[6] I2C_RB6(TwoWire * I2C_Ptr, unsigned char Addr, unsigned char Reg, int Num) {
+      unsigned char[6] RB;            // Hold returned data
+
+      // Point to the first data register to read from
+      I2C->beginTransmission(Addr);   // Start transmission to device 
+      I2C->write(Reg);                // Point to the data register to read
+      I2C->endTransmission();         // End transmission
+
+      // read the data registers
+      I2C->beginTransmission(Addr);   // Start transmission to device 
+      I2C->requestFrom(Addr, Num);      // Ask for 1 byte of data
+      if (I2C->available() >= Num) {    // Check if there is enough data to read
+        for(int x = 0; x < Num; ++x;) { RB[x] = I2C->read() }   // Read the data
+      }
+      else {                          // Incorrent number of returned bytes
+        
+        // TODO:  Do I need to do this or can it be ignored?
+        //        Must test !!!!
+        while(I2C->available()) { RB[0] = I2C->read(); }    // clear the returned data buffer
+      }
+      I2C->endTransmission();         // End transmission
+    }
+
+
+
+
+
+//---------------- Functions 
+//reads num bytes starting from address register on device in to buff array 
+void readFrom(int device, byte address, int num, byte buff[]) { 
+  Wire.beginTransmission(device); //start transmission to device  
+  Wire.send(address);        //sends address to read from 
+  Wire.endTransmission(); //end transmission 
+  
+    Wire.beginTransmission(device); //start transmission to device 
+  Wire.requestFrom(device, num);    // request 6 bytes from device 
+  
+  int i = 0; 
+  while(Wire.available())    //device may send less than requested (abnormal) 
+  {  
+    buff[i] = Wire.receive(); // receive a byte 
+    i++; 
+  } 
+  Wire.endTransmission(); //end transmission 
+}
+
+//Writes val to address register on device 
+void writeTo(int device, byte address, byte val) { 
+  Wire.beginTransmission(device); //start transmission to device  
+  Wire.send(address);        // send register address 
+  Wire.send(val);        // send value to write 
+  Wire.endTransmission(); //end transmission 
+} 
+
+
+
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+
+
+
+
 
 #endif  // SPARKFUN_9DOF_CLASS
