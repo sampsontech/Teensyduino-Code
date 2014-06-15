@@ -603,7 +603,7 @@ class SF9DOF_Support {
       I2C->beginTransmission(Addr);   // Start transmission to device 
       I2C->requestFrom(Addr, Num);      // Ask for 1 byte of data
       if (I2C->available() >= Num) {    // Check if there is enough data to read
-        for(int x = 0; x < Num; ++x;) { RB[x] = I2C->read() }   // Read the data
+        for(int x = 0; x < Num; x++;) { RB[x] = I2C->read() }   // Read the data
       }
       else {                          // Incorrent number of returned bytes
         
