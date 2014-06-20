@@ -40,9 +40,17 @@ void setup() {
 
 //---------------------------------------------------------------------------
 void loop() {
-  double Pos_X = 0;          // Holds the X position
+  double Pos_X = 0;         // Holds the X position
+  double Vf = 0;            // final Velocity
+  double Vi = 0;            // initial Velocity
+  double A = 0;             // Acceleration
+  double D = 0;             // Distance
+  
+  
   unsigned long TT;         // Time This reading
   unsigned long TL;         // Time Last reading
+  double T;          // Time Delta
+  
   
   Serial.println("Starting measurement...");
   
@@ -59,37 +67,41 @@ void loop() {
 
   // Read Accel and print results 
   for(;;) {
-    double D = 0;
     double D1 = 0;
     double D2 = 0;
     double D3 = 0;
     double D4 = 0;
     
-    TT = micros();  
+    // Calc the Time Delta for this cycle
+    TT = micros();                                    // Capture the timer value
+    T = (TT - TL) / (double)1000000;                  // Calc the Time Delta for this reading (Seconds)
+    TL = TT;                                          // Record the time marker for the next cycle
+
+    // Calc the acceleration in Meters per Second ^2
+    Accel.Read_Accel();                               // Read the Accelormeter and calc Velocity (final)
+    //Vf = Accel.Accel_X - Accel.Accel_X_Center_Ave;     // Adjust for Center using Average 
+    A = (double)Accel.Accel_X - (double)Accel.Accel_X_Center_LPF;     // Adjust for Center using LPF
+    A = A / (double)134;                              // Adjust for Scale (134 per G)
+    A = A * (double)9.8;                              // Convert G to Meters per Second
     
-    Accel.Read_Accel();
-    //D = Accel.Accel_X - Accel.Accel_X_Center_Ave;     // Adjust for Center using Average 
-    D = (double)Accel.Accel_X - (double)Accel.Accel_X_Center_LPF;     // Adjust for Center using LPF
-    
-    D = D / (double)134;                              // Adjust for Scale (134 per G)
-    
-    D = D * (double)9.8;                              // Convert G to Meters per Second
-    
-    D = D * (TT - TL) / (double)1000000;              // Adjust by the elapsed time
+    D = Vi * T + 0.5 * A * T * T;                     // Calc Distance travelled in this time delta
 
     Pos_X += D;                                       // Adjust the current position
-    TL = TT;                                          // Record the time marker for the next cycle
+    
+    Vi += A * T;                                      // Hold the final velocity for the next cycle
     
     Serial.print("Pos = ");
     Serial.print(Pos_X,6);
-    Serial.print("\tDelta = ");
+    Serial.print("\tDist = ");
     Serial.print(D,6);
     Serial.print("\tX Raw = ");
     Serial.print(Accel.Accel_X);
-    Serial.print("\tAve Center = ");
-    Serial.print(Accel.Accel_X_Center_Ave,6);
-    Serial.print("\tLPF Center = ");
-    Serial.print(Accel.Accel_X_Center_LPF,6);
+    Serial.print("\tA = ");
+    Serial.print(A,6);
+    Serial.print("\tVi = ");
+    Serial.print(Vi,6);
+    Serial.print("\tT = ");
+    Serial.print(T,6);
 
     Serial.print("\tDn = ");
     Serial.print(D1,9);
