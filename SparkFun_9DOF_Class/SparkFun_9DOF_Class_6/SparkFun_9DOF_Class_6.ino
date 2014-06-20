@@ -12,7 +12,7 @@
 */
 
 #include <Wire.h>
-#include "SparkFun_9DOF_5_Class.cpp"
+#include "SparkFun_9DOF_6_Class.cpp"
 
 // Define accelerometer object 
 ADXL345_HAL Accel;
@@ -46,7 +46,9 @@ void setup() {
   Serial.println("Done");
   
   // Initialize gyroscope object 
+  Serial.print("Setting up ITG3200 Gyroscope...");
   Gyro.Init_Dev(&Wire);    // Pass the "Wire" I2C object that it is to use 
+  Serial.println("Done");
     
   // End of Setup
   Serial.println("Startup complete.");
@@ -70,12 +72,11 @@ void loop() {
   Accel.Accel_Calib_LPF();
   Serial.println("Done");
 
-  // Print the last captured data
   Print_Accel_Data(9);
   
   // Read Gyro and print results 
   Gyro.Read_Gyro();
-  Gyro.Print_Gyro_Data();
+  Print_Gyro_Data();
  
   Serial.println();
   // Introduce a delay into the loop
@@ -90,31 +91,31 @@ void Print_Accel_Data(int detail_level) {
   if (detail_level==1 || detail_level==9){
     Serial.print("Accel Center Ave");
     Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave, 6);
+    Serial.print(Accel.Accel_X_Center_Ave, 6);
     Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave, 6);
+    Serial.print(Accel.Accel_Y_Center_Ave, 6);
     Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave, 6);
+    Serial.println(Accel.Accel_Z_Center_Ave, 6);
 
     Serial.print("Accel Center Ave Total");
     Serial.print("\t X=");
-    Serial.print(Accel_X_Center_Ave_Total);
+    Serial.print(Accel.Accel_X_Center_Ave_Total);
     Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_Ave_Total);
+    Serial.print(Accel.Accel_Y_Center_Ave_Total);
     Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_Ave_Total);
+    Serial.println(Accel.Accel_Z_Center_Ave_Total);
 
     Serial.print("Accel Center LPF");
     Serial.print("\t X=");
-    Serial.print(Accel_X_Center_LPF, 6);
+    Serial.print(Accel.Accel_X_Center_LPF, 6);
     Serial.print("\t Y=");
-    Serial.print(Accel_Y_Center_LPF, 6);
+    Serial.print(Accel.Accel_Y_Center_LPF, 6);
     Serial.print("\t Z=");
-    Serial.println(Accel_Z_Center_LPF, 6);
+    Serial.println(Accel.Accel_Z_Center_LPF, 6);
     
     float a_XZ, a_YZ;
-    a_XZ = atan2(Accel_X_Center_LPF, Accel_Z_Center_LPF);
-    a_YZ = atan2(Accel_Y_Center_LPF, Accel_Z_Center_LPF);
+    a_XZ = atan2(Accel.Accel_X_Center_LPF, Accel.Accel_Z_Center_LPF);
+    a_YZ = atan2(Accel.Accel_Y_Center_LPF, Accel.Accel_Z_Center_LPF);
     
     Serial.print("Accel Center LPF - ATAN2 XZ = ");
     Serial.print(a_XZ, 6);
@@ -126,11 +127,11 @@ void Print_Accel_Data(int detail_level) {
   
   if (detail_level==9){
     Serial.print("Accel X=");
-    Serial.print(Accel_X, DEC);
+    Serial.print(Accel.Accel_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Accel_Y, DEC);
+    Serial.print(Accel.Accel_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Accel_Z, DEC);
+    Serial.println(Accel.Accel_Z, DEC);
   }
 }
 
@@ -142,53 +143,68 @@ void Print_Compass_Data(int detail_level) {
   if (detail_level==1 || detail_level==9){
     Serial.print("Compass Calib Heading");
     Serial.print("\t XY=");
-    Serial.print(Compass_Heading);
+    Serial.print(Magno.Compass_Heading);
     Serial.print("\t XZ=");
-    Serial.print(Compass_Heading_XZ);
+    Serial.print(Magno.Compass_Heading_XZ);
     Serial.print("\t YZ=");
-    Serial.println(Compass_Heading_YZ);
+    Serial.println(Magno.Compass_Heading_YZ);
   }
 
   if (detail_level==9){
     Serial.print("Compass Calib");
     Serial.print("\t X=");
-    Serial.print(Compass_Calib_X, DEC);
+    Serial.print(Magno.Compass_Calib_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Compass_Calib_Y, DEC);
+    Serial.print(Magno.Compass_Calib_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Compass_Calib_Z, DEC);
+    Serial.println(Magno.Compass_Calib_Z, DEC);
 
     Serial.print("Compass Raw");
     Serial.print("\t X=");
-    Serial.print(Compass_Raw_X, DEC);
+    Serial.print(Magno.Compass_Raw_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Compass_Raw_Y, DEC);
+    Serial.print(Magno.Compass_Raw_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Compass_Raw_Z, DEC);
+    Serial.println(Magno.Compass_Raw_Z, DEC);
 
     Serial.print("Compass Min");
     Serial.print("\t X=");
-    Serial.print(Compass_Min_X, DEC);
+    Serial.print(Magno.Compass_Min_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Compass_Min_Y, DEC);
+    Serial.print(Magno.Compass_Min_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Compass_Min_Z, DEC);
+    Serial.println(Magno.Compass_Min_Z, DEC);
 
     Serial.print("Compass Max");
     Serial.print("\t X=");
-    Serial.print(Compass_Max_X, DEC);
+    Serial.print(Magno.Compass_Max_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Compass_Max_Y, DEC);
+    Serial.print(Magno.Compass_Max_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Compass_Max_Z, DEC);
+    Serial.println(Magno.Compass_Max_Z, DEC);
 
     Serial.print("Compass Offset");
     Serial.print("\t X=");
-    Serial.print(Compass_Offset_X, DEC);
+    Serial.print(Magno.Compass_Offset_X, DEC);
     Serial.print("\t : Y=");
-    Serial.print(Compass_Offset_Y, DEC);
+    Serial.print(Magno.Compass_Offset_Y, DEC);
     Serial.print("\t : Z=");
-    Serial.println(Compass_Offset_Z, DEC);
+    Serial.println(Magno.Compass_Offset_Z, DEC);
   }
 }
+
+// Print Gyro details to serial
+void Print_Gyro_Data() {
+  Serial.print("Gyro X=");
+  Serial.print(Gyro.Gyro_X, DEC);
+  Serial.print("\t : Y=");
+  Serial.print(Gyro.Gyro_Y, DEC);
+  Serial.print("\t : Z=");
+  Serial.print(Gyro.Gyro_Z, DEC);
+  Serial.print("\t Gyro Temp=");
+  Serial.println(Gyro.Gyro_T, DEC);
+  
+  Serial.print("Gyro Adjusted Temp=");
+  Serial.println( (((float)Gyro.Gyro_T+13200)/280)+35 );  //35degrees offset = -13200
+ }
 
