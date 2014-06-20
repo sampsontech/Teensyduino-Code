@@ -40,7 +40,7 @@ void setup() {
 
 //---------------------------------------------------------------------------
 void loop() {
-  float Pos_X = 0;          // Holds the X position
+  double Pos_X = 0;          // Holds the X position
   unsigned long TT;         // Time This reading
   unsigned long TL;         // Time Last reading
   
@@ -60,18 +60,44 @@ void loop() {
   // Read Accel and print results 
   for(;;) {
     double D = 0;
+    double D1 = 0;
+    double D2 = 0;
+    double D3 = 0;
+    double D4 = 0;
     
     TT = micros();  
-    Accel.Read_Accel();
     
-    D = Accel.Accel_X * (double)9.8 / (TT - TL);
-    Pos_X += D;
-    TL = TT;
+    Accel.Read_Accel();
+    //D = Accel.Accel_X - Accel.Accel_X_Center_Ave;     // Adjust for Center using Average 
+    D = (double)Accel.Accel_X - (double)Accel.Accel_X_Center_LPF;     // Adjust for Center using LPF
+    
+    D = D / (double)134;                              // Adjust for Scale (134 per G)
+    
+    D = D * (double)9.8;                              // Convert G to Meters per Second
+    
+    D = D * (TT - TL) / (double)1000000;              // Adjust by the elapsed time
+
+    Pos_X += D;                                       // Adjust the current position
+    TL = TT;                                          // Record the time marker for the next cycle
     
     Serial.print("Pos = ");
     Serial.print(Pos_X,6);
     Serial.print("\tDelta = ");
     Serial.print(D,6);
+    Serial.print("\tX Raw = ");
+    Serial.print(Accel.Accel_X);
+    Serial.print("\tAve Center = ");
+    Serial.print(Accel.Accel_X_Center_Ave,6);
+    Serial.print("\tLPF Center = ");
+    Serial.print(Accel.Accel_X_Center_LPF,6);
+
+    Serial.print("\tDn = ");
+    Serial.print(D1,9);
+    Serial.print(" , ");
+    Serial.print(D2,9);
+    Serial.print(" , ");
+    Serial.print(D3,9);
+    
     Serial.println();
     
     // Introduce a delay into the loop
