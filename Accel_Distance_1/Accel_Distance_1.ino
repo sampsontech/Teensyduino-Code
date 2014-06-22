@@ -58,11 +58,17 @@ void loop() {
   if (Accel.Accel_X_Center_Ave==99) {
     Serial.println("Performing a Accelometer calibration using the Averaging method");
     Accel.Accel_Calib_Ave();
+    Serial.print("Accel Calib Ave = ");
+    Serial.println(Accel.Accel_X_Center_Ave,9);
 
     Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
     Accel.Accel_Calib_LPF();
+    Serial.print("Accel Calib Ave = ");
+    Serial.println(Accel.Accel_X_Center_LPF,9);
 
     Serial.println("Done");
+    
+    delay(2000);
   }
 
   // Read Accel and print results 
@@ -79,10 +85,21 @@ void loop() {
 
     // Calc the acceleration in Meters per Second ^2
     Accel.Read_Accel();                                // Read the Accelormeter and calc Velocity (final)
-    A = DSF_Ave2((double)Accel.Accel_X);
-    D1 = A;
+
 //    A = (double)Accel.Accel_X - Accel.Accel_X_Center_LPF;     // Adjust for center offset using LPF
-    A = A - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
+    A = Accel.Accel_X - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
+    D4 = Accel.Accel_X_Center_LPF;
+
+    A = DSF_Ave2(A);               // Smooth the raw sensor data
+    D1 = A;
+
+    A = DSF_Ave3(A);               // Smooth the raw sensor data
+    D2 = A;
+
+    A = DSF_LPF(A, 0.2);          // Smooth the raw sensor data
+    D3 = A;
+
+
     // TODO: Accel class: develop better calibration routines that calc/measure the scales of the sensor
     A = A / 134;                                      // Adjust for accelerometer scale (134 per G)
     A = A * 9.8;                                      // Convert G to Meters per Second
@@ -112,6 +129,8 @@ void loop() {
     Serial.print(D2,9);
     Serial.print(" , ");
     Serial.print(D3,9);
+    Serial.print(" , ");
+    Serial.print(D4,9);
     
     Serial.println();
     
@@ -139,10 +158,23 @@ double DSF_Ave3(double I) {
   static double LI2;                           // last input
   double O = 0;                                // output
   
-  O = (I + LI1 + LI2) / 2;                     // ave together the current and last inputs
+  O = (I + LI1 + LI2) / 3;                     // ave together the current and last inputs
   
   LI2 = LI1;                                   // update the last input values
   LI1 = I;
+
+  return O;                                    // return the output
+}
+
+// Digital Signal Filter - Low Pass Filter using x Factor
+// (current and last)
+double DSF_LPF(double I, double F) {
+  static double LI;                           // last input
+  double O = 0;                               // output
+  
+  O = I * F + LI * (1 - F);                  // Low Pass Filter calc using this an dlast inputs by provided scale factor
+  
+  LI = I;                                     // update the last input values
 
   return O;                                    // return the output
 }

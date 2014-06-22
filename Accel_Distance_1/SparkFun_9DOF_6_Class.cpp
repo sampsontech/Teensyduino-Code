@@ -162,7 +162,7 @@ class ADXL345_HAL {
       Accel_Z_Center_Ave = 0;
       Accel_Z_Center_Ave_Total =0;
     
-      for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+      for (Accel_Reading_Count=1; Accel_Reading_Count<=1000; Accel_Reading_Count++) {
         // Serial.print(".");
     
         Read_Accel();
@@ -185,7 +185,7 @@ class ADXL345_HAL {
       Accel_Y_Center_LPF = 0;
       Accel_Z_Center_LPF = 0;
     
-      for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
+      for (Accel_Reading_Count=1; Accel_Reading_Count<=1000; Accel_Reading_Count++) {
         //Serial.print(".");
     
         Read_Accel();
