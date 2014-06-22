@@ -4,6 +4,7 @@
 *
 *    Requirements:  - "Wire" I2C library
 *                   - SparkFun 9DOF Class (version 6)
+                    - Kalman Filter Class
 *
 *    TODO:
 *
@@ -13,9 +14,11 @@
 
 #include <Wire.h>
 #include "SparkFun_9DOF_6_Class.cpp"
+#include "KalmanFilter_Class_2.cpp"
 
 // Define accelerometer object 
 ADXL345_HAL Accel;
+KalmanFilter KF;
 
 //---------------------------------------------------------------------------
 void setup() {
@@ -33,6 +36,9 @@ void setup() {
 
   // force a calibration event
   Accel.Accel_X_Center_Ave = 99;
+  
+  // Set up a Kalman Filter for the input signal
+  KF.setState(0);
 
   // End of Setup
   Serial.println("Startup complete.");
@@ -85,10 +91,7 @@ void loop() {
 
     // Calc the acceleration in Meters per Second ^2
     Accel.Read_Accel();                                // Read the Accelormeter and calc Velocity (final)
-
-//    A = (double)Accel.Accel_X - Accel.Accel_X_Center_LPF;     // Adjust for center offset using LPF
     A = Accel.Accel_X - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
-    D4 = Accel.Accel_X_Center_LPF;
 
     A = DSF_Ave2(A);               // Smooth the raw sensor data
     D1 = A;
@@ -98,6 +101,9 @@ void loop() {
 
     A = DSF_LPF(A, 0.2);          // Smooth the raw sensor data
     D3 = A;
+    
+    A = KF.filter(A);             // Smooth the raw sensor data using a Kalman Filter
+    D4 = A;
 
 
     // TODO: Accel class: develop better calibration routines that calc/measure the scales of the sensor
