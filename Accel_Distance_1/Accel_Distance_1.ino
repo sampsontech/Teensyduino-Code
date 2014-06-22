@@ -78,11 +78,14 @@ void loop() {
     TL = TT;                                          // Record the time marker for the next cycle
 
     // Calc the acceleration in Meters per Second ^2
-    Accel.Read_Accel();                               // Read the Accelormeter and calc Velocity (final)
-    //Vf = Accel.Accel_X - Accel.Accel_X_Center_Ave;     // Adjust for Center using Average 
-    A = (double)Accel.Accel_X - (double)Accel.Accel_X_Center_LPF;     // Adjust for Center using LPF
-    A = A / (double)134;                              // Adjust for Scale (134 per G)
-    A = A * (double)9.8;                              // Convert G to Meters per Second
+    Accel.Read_Accel();                                // Read the Accelormeter and calc Velocity (final)
+    A = DSF_Ave2((double)Accel.Accel_X);
+    D1 = A;
+//    A = (double)Accel.Accel_X - Accel.Accel_X_Center_LPF;     // Adjust for center offset using LPF
+    A = A - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
+    // TODO: Accel class: develop better calibration routines that calc/measure the scales of the sensor
+    A = A / 134;                                      // Adjust for accelerometer scale (134 per G)
+    A = A * 9.8;                                      // Convert G to Meters per Second
     
     D = Vi * T + 0.5 * A * T * T;                     // Calc Distance travelled in this time delta
 
@@ -117,4 +120,30 @@ void loop() {
   }
 }
 
+// Digital Signal Filter - Average by 2 elements
+// (current and last)
+double DSF_Ave2(double I) {
+  static double LI;                            // last input
+  double O = 0;                                // output
+  
+  O = (I + LI) / 2;                            // ave together the current and last inputs
+  LI = I;                                      // update the last input to the current value
+
+  return O;                                    // return the output
+}
+
+// Digital Signal Filter - Average by 3 elements
+// (current and last)
+double DSF_Ave3(double I) {
+  static double LI1;                           // last input
+  static double LI2;                           // last input
+  double O = 0;                                // output
+  
+  O = (I + LI1 + LI2) / 2;                     // ave together the current and last inputs
+  
+  LI2 = LI1;                                   // update the last input values
+  LI1 = I;
+
+  return O;                                    // return the output
+}
 
