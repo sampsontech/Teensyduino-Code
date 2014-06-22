@@ -6,29 +6,29 @@
 *
 * Requirements: -
 *
-* TODO:  - 
+* TODO: - I think this filter code is assuming a fixed time period between calls.
+*         Need to validate this and possibly make a version where the time Delta
+*         can be feed to the filter.
 *
 * REF: - Created by Max Lunin http://max.lunin.info : <nut.code.monkey@gmail.com>
 *      - http://en.wikipedia.org/wiki/Kalman_filter
 *
 *
 * USAGE:
-*   KalmanFilter kalmanFilter;            // create/declare with default parameters
+*   KalmanFilter KF;            // create/declare with default parameters
 *
-*   kalmanFilter.setState(startValue);
-*   kalmanFilter.setCovariance(0.1);      // optional 
+*   KF.setState(startValue);
+*   KF.setCovariance(0.1);      // optional 
 *
 *   while (true)
 *   {
 *       double value = getValueFromSensor();
-*       double correctedValue = kalmanFilter.filter(value);
+*       double correctedValue = KF.filter(value);
 *   }
 */
 
 #ifndef KALMAN_FILTER_CLASS
 #define KALMAN_FILTER_CLASS
-
-#include "Arduino.h"
 
 class KalmanFilter {
 public:

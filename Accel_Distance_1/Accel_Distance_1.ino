@@ -93,14 +93,14 @@ void loop() {
     Accel.Read_Accel();                                // Read the Accelormeter and calc Velocity (final)
     A = Accel.Accel_X - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
 
-    A = DSF_Ave2(A);               // Smooth the raw sensor data
-    D1 = A;
+    //A = DSF_Ave2(A);               // Smooth the raw sensor data
+    //D1 = A;
 
-    A = DSF_Ave3(A);               // Smooth the raw sensor data
-    D2 = A;
+    //A = DSF_Ave3(A);               // Smooth the raw sensor data
+    //D2 = A;
 
-    A = DSF_LPF(A, 0.2);          // Smooth the raw sensor data
-    D3 = A;
+    //A = DSF_LPF(A, 0.2);          // Smooth the raw sensor data
+    //D3 = A;
     
     A = KF.filter(A);             // Smooth the raw sensor data using a Kalman Filter
     D4 = A;
