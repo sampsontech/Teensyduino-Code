@@ -32,10 +32,10 @@ public:
       LV = CV;
 
 if data > RU then 
-	// slide the dead band range up
+  // slide the dead band range up
 
 if data < RL then 
-	// slide the dead band range up
+  // slide the dead band range up
 
 CV = (RU - RL) / 2 + RL;
 

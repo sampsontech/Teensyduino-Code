@@ -33,11 +33,11 @@
 class KalmanFilter {
 public:
     KalmanFilter(double q = 1, double r = 1, double f = 1, double h = 1) {
-    F = f;
-    Q = q;
-    H = h;
-    R = r;
-}
+      F = f;
+      Q = q;
+      H = h;
+      R = r;
+    }
 
     double getState() const { return state; }
 
@@ -46,33 +46,33 @@ public:
     void setCovariance(double covariance) { this->covariance = covariance; }
      
     double filter(double data) {
-    x0 = F * state;
-    p0 = F * F * covariance + Q;
+      x0 = F * state;
+      p0 = F * F * covariance + Q;
     
-    //measurement update - correction
-    double K = (H * p0) / (H * p0 * H + R);
-    state = x0 + K * (data - H * x0);
-    covariance = (1 - K * H) * p0;
+      //measurement update - correction
+      double K = (H * p0) / (H * p0 * H + R);
+      state = x0 + K * (data - H * x0);
+      covariance = (1 - K * H) * p0;
     
-    return state;
-}
+      return state;
+    }
 
 public:
     double getCovariance() const { return covariance; }
     double getX0() const { return x0; }
-    double getP0() const  { return p0; }
+    double getP0() const { return p0; }
     double getF() const { return F; }
     double getQ() const { return Q; }
-    double getH() const  { return H; }
+    double getH() const { return H; }
     double getR() const { return R; }
     
 private:
     double x0; // predicted state
     double p0; // predicted covariance
-    double F; // factor of real value to previous real value
-    double Q; // measurement noise
-    double H; // factor of measured value to real value
-    double R; // environment noise
+    double F;  // factor of real value to previous real value
+    double Q;  // measurement noise
+    double H;  // factor of measured value to real value
+    double R;  // environment noise
     double state;
     double covariance;
 };
