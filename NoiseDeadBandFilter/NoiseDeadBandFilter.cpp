@@ -31,25 +31,33 @@ public:
     double Filter(double data) {
       LV = CV;
 
-if data > RU then 
-  // slide the dead band range up
+      if(data > RU) { 
+        // slide the dead band range up
+        RL = (data - RU) + RL;
+        RU = data;
+      }
 
-if data < RL then 
-  // slide the dead band range up
-
-CV = (RU - RL) / 2 + RL;
+      if(data < RL) { 
+        // slide the dead band range down
+        RU = RU - (RL - data);
+        RL = data; 
+      }
+      
+      CV = (RU - RL) / 2 + RL;
 
       return CV;
     }
-
-    double GetRU() { return RU; }
-    double GetRL() { return RL; }
 
     void SetRange(double u, double l) {
       RU = u;
       RL = l;
     }
 
+    double GetRange() { return (RU - RL); }
+
+    double GetRU() { return RU; }
+
+    double GetRL() { return RL; }
 
 private:
     double RU; // Range Upper
