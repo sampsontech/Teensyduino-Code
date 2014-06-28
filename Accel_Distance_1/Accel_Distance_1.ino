@@ -28,27 +28,19 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Initiating Startup...");
 
+  //---------------------------------------------------------------------------
   // Setup I2C interface
   Wire.begin();
 
+  //---------------------------------------------------------------------------
   // Initialize accelerometer object 
   Serial.print("Setting up ADXL345 Accelerometer...");
   Accel.Init_Dev(&Wire);    // Pass the "Wire" I2C object that it is to use 
   Serial.println("Done");
 
-  // Just run the calibration routine once
-  Serial.println("Performing Accelometer calibration using the Averaging method");
-  Accel.Accel_Calib_Ave();
-  Serial.print("Accel Calib Ave = ");
-  Serial.println(Accel.Accel_X_Center_Ave,9);
-
-  Serial.println("Performing Accelometer calibration using the Low Pass Filter method");
-  Accel.Accel_Calib_LPF();
-  Serial.print("Accel Calib Ave = ");
-  Serial.println(Accel.Accel_X_Center_LPF,9);
-
+  //---------------------------------------------------------------------------
   Serial.println("Performing Accelometer calibration to establish the Noise Dead Band");
-  double ARU = 0;          // Accel NDBF upper range value
+  double ARU = -1000;      // Accel NDBF upper range value
   double ARL = 1000;       // Accel NDBF lower range value
 
   // read 1000 samples and get the MIN and MAX values to used for the Noise Dead Band Filter
@@ -57,16 +49,48 @@ void setup() {
     if (Accel.Accel_X > ARU) ARU = Accel.Accel_X;
     if (Accel.Accel_X < ARL) ARL = Accel.Accel_X;
   }
-  NDBF.SetRange(ARU,ARL);                // update the NDBF with the initial range
+  NDBF.SetRange(ARU, ARL);                // update the NDBF with the initial range
   Serial.print("Accel NDB Upper = ");
   Serial.print(ARU,9);
   Serial.print("\tAccel NDB Lower = ");
   Serial.println(ARL,9);
   Serial.println("Done");
-    
+
+  //---------------------------------------------------------------------------
+  Serial.println("Performing Accelometer calibration using the Averaging method");
+  Accel.Accel_Calib_Ave();
+  Serial.print("Accel Calib Ave = ");
+  Serial.println(Accel.Accel_X_Center_Ave,9);
+
+  //---------------------------------------------------------------------------
+  Serial.println("Performing Accelometer calibration using the Low Pass Filter method");
+  // Accel.Accel_Calib_LPF();
+  
+  double X_Temp = 0;
+
+  // read 1000 samples and get the MIN and MAX values to used for the Noise Dead Band Filter
+  for (int x = 1; x <= 1000; x++) {
+    Accel.Read_Accel();
+    X_Temp = NDBF.Filter(Accel.Accel_X);          // Filter out the noise dead band
+   
+    // Take 90% of the previous cumulative value and 10% on the current reading 
+    // (Bit like averaging
+    if (x == 1) {                                  // Prime the 1st reading
+      Accel.Accel_X_Center_LPF = X_Temp;    
+    }
+    else {
+      Accel.Accel_X_Center_LPF = Accel.Accel_X_Center_LPF * 0.9f + X_Temp * 0.1f;
+    }
+  }
+
+  Serial.print("Accel Calib LPF = ");
+  Serial.println(Accel.Accel_X_Center_LPF,9);
+
+  //---------------------------------------------------------------------------
   // Set up a Kalman Filter for the input signal
   KF.setState(0);
 
+  //---------------------------------------------------------------------------
   // End of Setup
   Serial.println("Startup complete.");
   
@@ -108,11 +132,11 @@ void loop() {
 
     // Calc the acceleration in Meters per Second ^2
     Accel.Read_Accel();                                // Read the Accelormeter
-    
+
     A = NDBF.Filter(Accel.Accel_X);                    // Filter out the Noise Dead Band 
     D1 = A;
     
-    A = A - Accel.Accel_X_Center_LPF;                  // Adjust for center offset using LPF
+    A = A - Accel.Accel_X_Center_LPF;     // Adjust for center offset using LPF
     D2 = A;
 
     //A = DSF_Ave2(A);               // Smooth the raw sensor data
@@ -168,7 +192,7 @@ void loop() {
     Serial.println();
     
     // Introduce a delay into the loop
-    delay(50);
+    delay(25);
   }
 }
 
