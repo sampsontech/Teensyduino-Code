@@ -185,6 +185,12 @@ class ADXL345_HAL {
       Accel_Y_Center_LPF = 0;
       Accel_Z_Center_LPF = 0;
     
+      // Take an initial reading to prime the calibration
+      Read_Accel();
+      Accel_X_Center_LPF = Accel_X;
+      Accel_Y_Center_LPF = Accel_Y;
+      Accel_Z_Center_LPF = Accel_Z;
+
       for (Accel_Reading_Count=1; Accel_Reading_Count<=100; Accel_Reading_Count++) {
         //Serial.print(".");
     

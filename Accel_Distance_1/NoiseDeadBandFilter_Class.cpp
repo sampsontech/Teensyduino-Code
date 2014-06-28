@@ -27,8 +27,16 @@
 
 class NoiseDeadBandFilter {
 public:
-    NoiseDeadBandFilter() {}
+    // Constructor
+    NoiseDeadBandFilter() {
+      CV = 0;
+      LV = 0;
+      RU = 0;
+      RL = 0;
+    }
      
+    
+    // Main Filter routine
     double Filter(double data) {
       LV = CV;
 

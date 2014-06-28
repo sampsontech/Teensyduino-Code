@@ -15,7 +15,7 @@
 #include <Wire.h>
 #include "SparkFun_9DOF_6_Class.cpp"
 #include "KalmanFilter_Class_2.cpp"
-#include "NoiseDeadBandFilter.cpp"
+#include "NoiseDeadBandFilter_Class.cpp"
 
 // Define accelerometer object 
 ADXL345_HAL Accel;
@@ -148,8 +148,8 @@ void loop() {
     //A = DSF_LPF(A, 0.2);          // Smooth the raw sensor data
     //D3 = A;
     
-    A = KF.filter(A);             // Smooth the raw sensor data using a Kalman Filter
-    D4 = A;
+    //A = KF.filter(A);             // Smooth the raw sensor data using a Kalman Filter
+    //D4 = A;
 
 
     // TODO: Accel class: develop better calibration routines that calc/measure the scales of the sensor

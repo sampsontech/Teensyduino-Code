@@ -5,7 +5,8 @@
 *
 * Requirements: -
 *
-* TODO: - 
+* TODO: - Create a routine that takes a ref to the Accelerometer and
+*         the Axis to use and establish the dead band range
 *
 * REF: - 
 *
@@ -26,8 +27,16 @@
 
 class NoiseDeadBandFilter {
 public:
-    NoiseDeadBandFilter() {}
+    // Constructor
+    NoiseDeadBandFilter() {
+      CV = 0;
+      LV = 0;
+      RU = 0;
+      RL = 0;
+    }
      
+    
+    // Main Filter routine
     double Filter(double data) {
       LV = CV;
 
