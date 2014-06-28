@@ -15,10 +15,12 @@
 #include <Wire.h>
 #include "SparkFun_9DOF_6_Class.cpp"
 #include "KalmanFilter_Class_2.cpp"
+#include "NoiseDeadBandFilter.cpp"
 
 // Define accelerometer object 
 ADXL345_HAL Accel;
 KalmanFilter KF;
+NoiseDeadBandFilter NDBF;
 
 //---------------------------------------------------------------------------
 void setup() {
@@ -34,14 +36,41 @@ void setup() {
   Accel.Init_Dev(&Wire);    // Pass the "Wire" I2C object that it is to use 
   Serial.println("Done");
 
-  // force a calibration event
-  Accel.Accel_X_Center_Ave = 99;
-  
+  // Just run the calibration routine once
+  Serial.println("Performing Accelometer calibration using the Averaging method");
+  Accel.Accel_Calib_Ave();
+  Serial.print("Accel Calib Ave = ");
+  Serial.println(Accel.Accel_X_Center_Ave,9);
+
+  Serial.println("Performing Accelometer calibration using the Low Pass Filter method");
+  Accel.Accel_Calib_LPF();
+  Serial.print("Accel Calib Ave = ");
+  Serial.println(Accel.Accel_X_Center_LPF,9);
+
+  Serial.println("Performing Accelometer calibration to establish the Noise Dead Band");
+  double ARU = 0;          // Accel NDBF upper range value
+  double ARL = 1000;       // Accel NDBF lower range value
+
+  // read 1000 samples and get the MIN and MAX values to used for the Noise Dead Band Filter
+  for (int x = 1; x <= 1000; x++) {
+    Accel.Read_Accel();
+    if (Accel.Accel_X > ARU) ARU = Accel.Accel_X;
+    if (Accel.Accel_X < ARL) ARL = Accel.Accel_X;
+  }
+  NDBF.SetRange(ARU,ARL);                // update the NDBF with the initial range
+  Serial.print("Accel NDB Upper = ");
+  Serial.print(ARU,9);
+  Serial.print("\tAccel NDB Lower = ");
+  Serial.println(ARL,9);
+  Serial.println("Done");
+    
   // Set up a Kalman Filter for the input signal
   KF.setState(0);
 
   // End of Setup
   Serial.println("Startup complete.");
+  
+  delay(1000);
 }
 
 //---------------------------------------------------------------------------
@@ -50,32 +79,20 @@ void loop() {
   double Vf = 0;            // final Velocity
   double Vi = 0;            // initial Velocity
   double A = 0;             // Acceleration
-  double D = 0;             // Distance
+  double D = 99999;             // Distance
   
   
+  unsigned long TS;         // Time Started reading
   unsigned long TT;         // Time This reading
   unsigned long TL;         // Time Last reading
-  double T;          // Time Delta
-  
+  double T;                 // Time Delta (in Seconds)
   
   Serial.println("Starting measurement...");
-  
-  // Just run the calibration routine once
-  if (Accel.Accel_X_Center_Ave==99) {
-    Serial.println("Performing a Accelometer calibration using the Averaging method");
-    Accel.Accel_Calib_Ave();
-    Serial.print("Accel Calib Ave = ");
-    Serial.println(Accel.Accel_X_Center_Ave,9);
 
-    Serial.println("Performing a Accelometer calibration using the Low Pass Filter method");
-    Accel.Accel_Calib_LPF();
-    Serial.print("Accel Calib Ave = ");
-    Serial.println(Accel.Accel_X_Center_LPF,9);
-
-    Serial.println("Done");
-    
-    delay(2000);
-  }
+  // Initialise the timing data (need to do this as late as possible
+  // so the first reading isn't skewed
+  TS = micros();                                      // Capture the Start Time
+  TL = TS;                                            // Initialise timer variables
 
   // Read Accel and print results 
   for(;;) {
@@ -90,8 +107,13 @@ void loop() {
     TL = TT;                                          // Record the time marker for the next cycle
 
     // Calc the acceleration in Meters per Second ^2
-    Accel.Read_Accel();                                // Read the Accelormeter and calc Velocity (final)
-    A = Accel.Accel_X - Accel.Accel_X_Center_LPF;                 // Adjust for center offset using LPF
+    Accel.Read_Accel();                                // Read the Accelormeter
+    
+    A = NDBF.Filter(Accel.Accel_X);                    // Filter out the Noise Dead Band 
+    D1 = A;
+    
+    A = A - Accel.Accel_X_Center_LPF;                  // Adjust for center offset using LPF
+    D2 = A;
 
     //A = DSF_Ave2(A);               // Smooth the raw sensor data
     //D1 = A;
@@ -110,11 +132,16 @@ void loop() {
     A = A / 134;                                      // Adjust for accelerometer scale (134 per G)
     A = A * 9.8;                                      // Convert G to Meters per Second
     
-    D = Vi * T + 0.5 * A * T * T;                     // Calc Distance travelled in this time delta
-
-    Pos_X += D;                                       // Adjust the current position
+    // Dont calc velocity and position for the 1st 3 seconds of measurement
+    // This is to allow all the filters to normalize 
+    if (TT > (TS + 3000000)) {
     
-    Vi += A * T;                                      // Hold the final velocity for the next cycle
+      D = Vi * T + 0.5 * A * T * T;                     // Calc Distance travelled in this time delta
+
+      Pos_X += D;                                       // Adjust the current position
+    
+      Vi += A * T;                                      // Hold the final velocity for the next cycle
+    }
     
     Serial.print("Pos = ");
     Serial.print(Pos_X,6);

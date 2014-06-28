@@ -5,7 +5,8 @@
 *
 * Requirements: -
 *
-* TODO: - 
+* TODO: - Create a routine that takes a ref to the Accelerometer and
+*         the Axis to use and establish the dead band range
 *
 * REF: - 
 *
