@@ -23,5 +23,6 @@ extern "C" void __cxa_pure_virtual() {;}
 //
 //
 
-#include "C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\arduino.h"
+#include "C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\variants\standard\pins_arduino.h" 
+#include "C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\cores\arduino\arduino.h"
 #include "S:\Software_GitHub_Sync\Teensyduino-Code\AtmelStudio_Test_1\AtmelStudio_Test_1.ino"

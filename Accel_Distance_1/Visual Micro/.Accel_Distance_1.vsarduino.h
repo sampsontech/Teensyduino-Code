@@ -13,6 +13,9 @@
 #define ARDUINO 101
 #define ARDUINO_MAIN
 #define __AVR__
+#define F_CPU 16000000L
+#define USB_SERIAL
+#define LAYOUT_US_ENGLISH
 #define TEENSYDUINO 118
 #define __cplusplus
 extern "C" void __cxa_pure_virtual() {;}

@@ -27,15 +27,15 @@
     <BootSegment>0</BootSegment>
     <AsfFrameworkConfig>
       <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.6.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.6.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
     <avrtool />
   </PropertyGroup>
@@ -57,6 +57,9 @@
             <Value>ARDUINO=101</Value>
             <Value>ARDUINO_MAIN</Value>
             <Value>__AVR__</Value>
+            <Value>F_CPU=16000000L</Value>
+            <Value>USB_SERIAL</Value>
+            <Value>LAYOUT_US_ENGLISH</Value>
             <Value>TEENSYDUINO=118</Value>
             <Value>__cplusplus</Value>
           </ListValues>
@@ -93,6 +96,9 @@
             <Value>ARDUINO=101</Value>
             <Value>ARDUINO_MAIN</Value>
             <Value>__AVR__</Value>
+            <Value>F_CPU=16000000L</Value>
+            <Value>USB_SERIAL</Value>
+            <Value>LAYOUT_US_ENGLISH</Value>
             <Value>TEENSYDUINO=118</Value>
             <Value>__cplusplus</Value>
           </ListValues>
@@ -267,6 +273,7 @@ build.arch=AVR
         <visualmicro.package.name>teensy</visualmicro.package.name>
         <visualmicro.platform.name>avr</visualmicro.platform.name>
         <arduino.upload.port>COM3</arduino.upload.port>
+        <VM_ADDITIONAL_PREPROC>F_CPU=16000000L;USB_SERIAL;LAYOUT_US_ENGLISH</VM_ADDITIONAL_PREPROC>
       </VisualMicroSettings>
     </VisualMicroSettings>
   </PropertyGroup>
@@ -288,6 +295,9 @@ build.arch=AVR
             <Value>ARDUINO=101</Value>
             <Value>ARDUINO_MAIN</Value>
             <Value>__AVR__</Value>
+            <Value>F_CPU=16000000L</Value>
+            <Value>USB_SERIAL</Value>
+            <Value>LAYOUT_US_ENGLISH</Value>
             <Value>TEENSYDUINO=118</Value>
             <Value>__cplusplus</Value>
           </ListValues>
@@ -324,6 +334,9 @@ build.arch=AVR
             <Value>ARDUINO=101</Value>
             <Value>ARDUINO_MAIN</Value>
             <Value>__AVR__</Value>
+            <Value>F_CPU=16000000L</Value>
+            <Value>USB_SERIAL</Value>
+            <Value>LAYOUT_US_ENGLISH</Value>
             <Value>TEENSYDUINO=118</Value>
             <Value>__cplusplus</Value>
           </ListValues>
@@ -498,6 +511,7 @@ build.arch=AVR
         <visualmicro.package.name>teensy</visualmicro.package.name>
         <visualmicro.platform.name>avr</visualmicro.platform.name>
         <arduino.upload.port>COM3</arduino.upload.port>
+        <VM_ADDITIONAL_PREPROC>F_CPU=16000000L;USB_SERIAL;LAYOUT_US_ENGLISH</VM_ADDITIONAL_PREPROC>
       </VisualMicroSettings>
     </VisualMicroSettings>
   </PropertyGroup>

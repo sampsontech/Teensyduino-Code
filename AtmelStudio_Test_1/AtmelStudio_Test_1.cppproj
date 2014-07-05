@@ -52,9 +52,10 @@
         <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
         <avrgcc.compiler.directories.IncludePaths>
           <ListValues>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\cores\arduino</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\variants\standard</Value>
             <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
             <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
             <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
@@ -87,9 +88,10 @@
         </avrgcccpp.compiler.symbols.DefSymbols>
         <avrgcccpp.compiler.directories.IncludePaths>
           <ListValues>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\cores\arduino</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\variants\standard</Value>
             <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
             <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
             <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
@@ -142,9 +144,10 @@
         <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
         <avrgcc.compiler.directories.IncludePaths>
           <ListValues>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\cores\arduino</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\variants\standard</Value>
             <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
             <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
             <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
@@ -177,9 +180,10 @@
         </avrgcccpp.compiler.symbols.DefSymbols>
         <avrgcccpp.compiler.directories.IncludePaths>
           <ListValues>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\cores\arduino</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\variants\standard</Value>
             <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\arduino\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
             <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
             <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
