@@ -18,8 +18,7 @@
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue>
-    </OverrideVtorValue>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <ProgFlashFromRam>true</ProgFlashFromRam>
     <RamSnippetAddress>0x20000000</RamSnippetAddress>
@@ -43,86 +42,88 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrGccCpp>
-  <avrgcc.common.optimization.RelaxBranches>True</avrgcc.common.optimization.RelaxBranches>
-  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcc.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>__AVR_AT90usb1286__</Value>
-      <Value>__AVR_AT90USB1286__</Value>
-      <Value>ARDUINO=101</Value>
-      <Value>ARDUINO_MAIN</Value>
-      <Value>__AVR__</Value>
-      <Value>TEENSYDUINO=118</Value>
-      <Value>__cplusplus</Value>
-    </ListValues>
-  </avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
-      <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
-      <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
-    </ListValues>
-  </avrgcc.compiler.directories.IncludePaths>
-  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
-  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
-  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-  <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -include=arduino.h</avrgcc.compiler.miscellaneous.OtherFlags>
-  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
-  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcccpp.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>__AVR_AT90usb1286__</Value>
-      <Value>__AVR_AT90USB1286__</Value>
-      <Value>ARDUINO=101</Value>
-      <Value>ARDUINO_MAIN</Value>
-      <Value>__AVR__</Value>
-      <Value>TEENSYDUINO=118</Value>
-      <Value>__cplusplus</Value>
-    </ListValues>
-  </avrgcccpp.compiler.symbols.DefSymbols>
-  <avrgcccpp.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
-      <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
-      <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
-    </ListValues>
-  </avrgcccpp.compiler.directories.IncludePaths>
-  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
-  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
-  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
-  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
-  <avrgcccpp.compiler.miscellaneous.OtherFlags>-include=arduino.h</avrgcccpp.compiler.miscellaneous.OtherFlags>
-  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
-</AvrGccCpp>
+        <avrgcc.common.optimization.RelaxBranches>True</avrgcc.common.optimization.RelaxBranches>
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>__AVR_AT90usb1286__</Value>
+            <Value>__AVR_AT90USB1286__</Value>
+            <Value>ARDUINO=101</Value>
+            <Value>ARDUINO_MAIN</Value>
+            <Value>__AVR__</Value>
+            <Value>TEENSYDUINO=118</Value>
+            <Value>__cplusplus</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
+            <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
+          </ListValues>
+        </avrgcc.compiler.directories.IncludePaths>
+        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -include=arduino.h</avrgcc.compiler.miscellaneous.OtherFlags>
+        <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcccpp.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>__AVR_AT90usb1286__</Value>
+            <Value>__AVR_AT90USB1286__</Value>
+            <Value>ARDUINO=101</Value>
+            <Value>ARDUINO_MAIN</Value>
+            <Value>__AVR__</Value>
+            <Value>TEENSYDUINO=118</Value>
+            <Value>__cplusplus</Value>
+          </ListValues>
+        </avrgcccpp.compiler.symbols.DefSymbols>
+        <avrgcccpp.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
+            <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
+            <Value>
+            </Value>
+          </ListValues>
+        </avrgcccpp.compiler.directories.IncludePaths>
+        <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+        <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+        <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+        <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+        <avrgcccpp.compiler.miscellaneous.OtherFlags>-include=arduino.h</avrgcccpp.compiler.miscellaneous.OtherFlags>
+        <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+      </AvrGccCpp>
     </ToolchainSettings>
     <VisualMicroSettings>
       <VisualMicroSettings>
@@ -272,86 +273,88 @@ build.arch=AVR
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGccCpp>
-  <avrgcc.common.optimization.RelaxBranches>True</avrgcc.common.optimization.RelaxBranches>
-  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcc.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>__AVR_AT90usb1286__</Value>
-      <Value>__AVR_AT90USB1286__</Value>
-      <Value>ARDUINO=101</Value>
-      <Value>ARDUINO_MAIN</Value>
-      <Value>__AVR__</Value>
-      <Value>TEENSYDUINO=118</Value>
-      <Value>__cplusplus</Value>
-    </ListValues>
-  </avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
-      <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
-      <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
-    </ListValues>
-  </avrgcc.compiler.directories.IncludePaths>
-  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
-  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
-  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-  <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -include=arduino.h</avrgcc.compiler.miscellaneous.OtherFlags>
-  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
-  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcccpp.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>__AVR_AT90usb1286__</Value>
-      <Value>__AVR_AT90USB1286__</Value>
-      <Value>ARDUINO=101</Value>
-      <Value>ARDUINO_MAIN</Value>
-      <Value>__AVR__</Value>
-      <Value>TEENSYDUINO=118</Value>
-      <Value>__cplusplus</Value>
-    </ListValues>
-  </avrgcccpp.compiler.symbols.DefSymbols>
-  <avrgcccpp.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
-      <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
-      <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
-      <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
-      <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
-    </ListValues>
-  </avrgcccpp.compiler.directories.IncludePaths>
-  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
-  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
-  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
-  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
-  <avrgcccpp.compiler.miscellaneous.OtherFlags>-include=arduino.h</avrgcccpp.compiler.miscellaneous.OtherFlags>
-  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
-</AvrGccCpp>
+        <avrgcc.common.optimization.RelaxBranches>True</avrgcc.common.optimization.RelaxBranches>
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>__AVR_AT90usb1286__</Value>
+            <Value>__AVR_AT90USB1286__</Value>
+            <Value>ARDUINO=101</Value>
+            <Value>ARDUINO_MAIN</Value>
+            <Value>__AVR__</Value>
+            <Value>TEENSYDUINO=118</Value>
+            <Value>__cplusplus</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
+            <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
+          </ListValues>
+        </avrgcc.compiler.directories.IncludePaths>
+        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -include=arduino.h</avrgcc.compiler.miscellaneous.OtherFlags>
+        <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcccpp.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>__AVR_AT90usb1286__</Value>
+            <Value>__AVR_AT90USB1286__</Value>
+            <Value>ARDUINO=101</Value>
+            <Value>ARDUINO_MAIN</Value>
+            <Value>__AVR__</Value>
+            <Value>TEENSYDUINO=118</Value>
+            <Value>__cplusplus</Value>
+          </ListValues>
+        </avrgcccpp.compiler.symbols.DefSymbols>
+        <avrgcccpp.compiler.directories.IncludePaths>
+          <ListValues>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\utils</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\cores\teensy\avr</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries\Wire\utility</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\libraries</Value>
+            <Value>C:\Users\david\Desktop\Teensy Software\arduino-1.0.5-r2\hardware\teensy\libraries</Value>
+            <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
+            <Value>S:\Software_GitHub_Sync\Teensyduino-Code\libraries</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\include\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\avr\</Value>
+            <Value>c:\users\david\desktop\teensy software\arduino-1.0.5-r2\hardware\tools\avr\lib\gcc\avr\4.3.2\include\</Value>
+            <Value>
+            </Value>
+          </ListValues>
+        </avrgcccpp.compiler.directories.IncludePaths>
+        <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+        <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+        <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+        <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+        <avrgcccpp.compiler.miscellaneous.OtherFlags>-include=arduino.h</avrgcccpp.compiler.miscellaneous.OtherFlags>
+        <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+      </AvrGccCpp>
     </ToolchainSettings>
     <VisualMicroSettings>
       <VisualMicroSettings>
