@@ -130,9 +130,9 @@ class ADXL345_HAL {
       I2C->beginTransmission(AccelAddress);  // start transmission to device 
       I2C->requestFrom(AccelAddress, 6);
       if (I2C->available() >= 6) {
-        Accel_X = I2C->read() + (I2C->read() * 256);  // X axis LSB + X axis MSB * 256
-        Accel_Y = I2C->read() + (I2C->read() * 256);  // Y axis LSB + Y axis MSB * 256
-        Accel_Z = I2C->read() + (I2C->read() * 256);  // Z axis LSB + Z axis MSB * 256
+        Accel_X = (int16_t)I2C->read() | (int16_t)(I2C->read() << 8);  // X axis LSB + MSB
+        Accel_Y = (int16_t)I2C->read() | (int16_t)(I2C->read() << 8);  // Y axis LSB + MSB
+        Accel_Z = (int16_t)I2C->read() | (int16_t)(I2C->read() << 8);  // Z axis LSB + MSB
       }
 
       // Incorrent number of returned bytes
@@ -291,9 +291,9 @@ class HMC5883L_HAL {
       I2C->requestFrom(CompassAddress, 6);
       if (I2C->available() >= 6) {
         //Just confirming that the data register order is X Z Y (ie NOT X Y Z) 
-        Compass_Raw_X = (I2C->read() * 256) + I2C->read();  // X axis MSB * 256 + X axis LSB
-        Compass_Raw_Z = (I2C->read() * 256) + I2C->read();  // Z axis MSB * 256 + Z axis LSB
-        Compass_Raw_Y = (I2C->read() * 256) + I2C->read();  // Y axis MSB * 256 + Y axis LSB
+        Compass_Raw_X = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // X axis MSB + LSB
+        Compass_Raw_Y = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // Y axis MSB + LSB
+        Compass_Raw_Z = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // Z axis MSB + LSB
       }
   
       // Incorrent number of returned bytes
@@ -432,10 +432,10 @@ class ITG3200_HAL {
       I2C->requestFrom(GyroAddress, 8);
       if (I2C->available() >= 8) {
         //Just confirming that the data order is Temp, X, Y, Z
-        Gyro_T = (I2C->read() * 256) + I2C->read();  // Temp MSB * 256 + Temp LSB
-        Gyro_X = (I2C->read() * 256) + I2C->read();  // X axis MSB * 256 + X axis LSB
-        Gyro_Y = (I2C->read() * 256) + I2C->read();  // Y axis MSB * 256 + Y axis LSB
-        Gyro_Z = (I2C->read() * 256) + I2C->read();  // Z axis MSB * 256 + Z axis LSB
+        Gyro_T = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // Temp MSB + LSB
+        Gyro_X = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // X axis MSB + LSB
+        Gyro_Y = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // Y axis MSB + LSB
+        Gyro_Z = (int16_t)(I2C->read() << 8) | (int16_t)I2C->read();  // Z axis MSB + LSB
         }
   
       // Incorrent number of returned bytes
