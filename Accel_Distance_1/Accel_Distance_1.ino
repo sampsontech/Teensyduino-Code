@@ -24,6 +24,8 @@ NoiseDeadBandFilter NDBF;
 
 //---------------------------------------------------------------------------
 void setup() {
+  delay(1000);
+  
   // Setup Serial output
   Serial.begin(115200);
   Serial.println("Initiating Startup...");
